@@ -9,38 +9,280 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as PendingApprovalRouteImport } from './routes/pending-approval'
+import { Route as OfficerRouteImport } from './routes/officer'
+import { Route as MemberRouteImport } from './routes/member'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as OfficerIndexRouteImport } from './routes/officer.index'
+import { Route as MemberIndexRouteImport } from './routes/member.index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as MemberApplyLoanRouteImport } from './routes/member.apply-loan'
+import { Route as AdminProductsRouteImport } from './routes/admin.products'
+import { Route as AdminMembersRouteImport } from './routes/admin.members'
+import { Route as AdminLoansRouteImport } from './routes/admin.loans'
+import { Route as AdminAuditRouteImport } from './routes/admin.audit'
+import { Route as MemberShopIndexRouteImport } from './routes/member.shop.index'
+import { Route as MemberLoansIndexRouteImport } from './routes/member.loans.index'
+import { Route as MemberShopIdRouteImport } from './routes/member.shop.$id'
+import { Route as MemberLoansIdRouteImport } from './routes/member.loans.$id'
 
+const PendingApprovalRoute = PendingApprovalRouteImport.update({
+  id: '/pending-approval',
+  path: '/pending-approval',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OfficerRoute = OfficerRouteImport.update({
+  id: '/officer',
+  path: '/officer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MemberRoute = MemberRouteImport.update({
+  id: '/member',
+  path: '/member',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OfficerIndexRoute = OfficerIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => OfficerRoute,
+} as any)
+const MemberIndexRoute = MemberIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => MemberRoute,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const MemberApplyLoanRoute = MemberApplyLoanRouteImport.update({
+  id: '/apply-loan',
+  path: '/apply-loan',
+  getParentRoute: () => MemberRoute,
+} as any)
+const AdminProductsRoute = AdminProductsRouteImport.update({
+  id: '/products',
+  path: '/products',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminMembersRoute = AdminMembersRouteImport.update({
+  id: '/members',
+  path: '/members',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminLoansRoute = AdminLoansRouteImport.update({
+  id: '/loans',
+  path: '/loans',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAuditRoute = AdminAuditRouteImport.update({
+  id: '/audit',
+  path: '/audit',
+  getParentRoute: () => AdminRoute,
+} as any)
+const MemberShopIndexRoute = MemberShopIndexRouteImport.update({
+  id: '/shop/',
+  path: '/shop/',
+  getParentRoute: () => MemberRoute,
+} as any)
+const MemberLoansIndexRoute = MemberLoansIndexRouteImport.update({
+  id: '/loans/',
+  path: '/loans/',
+  getParentRoute: () => MemberRoute,
+} as any)
+const MemberShopIdRoute = MemberShopIdRouteImport.update({
+  id: '/shop/$id',
+  path: '/shop/$id',
+  getParentRoute: () => MemberRoute,
+} as any)
+const MemberLoansIdRoute = MemberLoansIdRouteImport.update({
+  id: '/loans/$id',
+  path: '/loans/$id',
+  getParentRoute: () => MemberRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/member': typeof MemberRouteWithChildren
+  '/officer': typeof OfficerRouteWithChildren
+  '/pending-approval': typeof PendingApprovalRoute
+  '/admin/audit': typeof AdminAuditRoute
+  '/admin/loans': typeof AdminLoansRoute
+  '/admin/members': typeof AdminMembersRoute
+  '/admin/products': typeof AdminProductsRoute
+  '/member/apply-loan': typeof MemberApplyLoanRoute
+  '/admin/': typeof AdminIndexRoute
+  '/member/': typeof MemberIndexRoute
+  '/officer/': typeof OfficerIndexRoute
+  '/member/loans/$id': typeof MemberLoansIdRoute
+  '/member/shop/$id': typeof MemberShopIdRoute
+  '/member/loans/': typeof MemberLoansIndexRoute
+  '/member/shop/': typeof MemberShopIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/pending-approval': typeof PendingApprovalRoute
+  '/admin/audit': typeof AdminAuditRoute
+  '/admin/loans': typeof AdminLoansRoute
+  '/admin/members': typeof AdminMembersRoute
+  '/admin/products': typeof AdminProductsRoute
+  '/member/apply-loan': typeof MemberApplyLoanRoute
+  '/admin': typeof AdminIndexRoute
+  '/member': typeof MemberIndexRoute
+  '/officer': typeof OfficerIndexRoute
+  '/member/loans/$id': typeof MemberLoansIdRoute
+  '/member/shop/$id': typeof MemberShopIdRoute
+  '/member/loans': typeof MemberLoansIndexRoute
+  '/member/shop': typeof MemberShopIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/member': typeof MemberRouteWithChildren
+  '/officer': typeof OfficerRouteWithChildren
+  '/pending-approval': typeof PendingApprovalRoute
+  '/admin/audit': typeof AdminAuditRoute
+  '/admin/loans': typeof AdminLoansRoute
+  '/admin/members': typeof AdminMembersRoute
+  '/admin/products': typeof AdminProductsRoute
+  '/member/apply-loan': typeof MemberApplyLoanRoute
+  '/admin/': typeof AdminIndexRoute
+  '/member/': typeof MemberIndexRoute
+  '/officer/': typeof OfficerIndexRoute
+  '/member/loans/$id': typeof MemberLoansIdRoute
+  '/member/shop/$id': typeof MemberShopIdRoute
+  '/member/loans/': typeof MemberLoansIndexRoute
+  '/member/shop/': typeof MemberShopIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/member'
+    | '/officer'
+    | '/pending-approval'
+    | '/admin/audit'
+    | '/admin/loans'
+    | '/admin/members'
+    | '/admin/products'
+    | '/member/apply-loan'
+    | '/admin/'
+    | '/member/'
+    | '/officer/'
+    | '/member/loans/$id'
+    | '/member/shop/$id'
+    | '/member/loans/'
+    | '/member/shop/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/login'
+    | '/pending-approval'
+    | '/admin/audit'
+    | '/admin/loans'
+    | '/admin/members'
+    | '/admin/products'
+    | '/member/apply-loan'
+    | '/admin'
+    | '/member'
+    | '/officer'
+    | '/member/loans/$id'
+    | '/member/shop/$id'
+    | '/member/loans'
+    | '/member/shop'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/member'
+    | '/officer'
+    | '/pending-approval'
+    | '/admin/audit'
+    | '/admin/loans'
+    | '/admin/members'
+    | '/admin/products'
+    | '/member/apply-loan'
+    | '/admin/'
+    | '/member/'
+    | '/officer/'
+    | '/member/loans/$id'
+    | '/member/shop/$id'
+    | '/member/loans/'
+    | '/member/shop/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  LoginRoute: typeof LoginRoute
+  MemberRoute: typeof MemberRouteWithChildren
+  OfficerRoute: typeof OfficerRouteWithChildren
+  PendingApprovalRoute: typeof PendingApprovalRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/pending-approval': {
+      id: '/pending-approval'
+      path: '/pending-approval'
+      fullPath: '/pending-approval'
+      preLoaderRoute: typeof PendingApprovalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/officer': {
+      id: '/officer'
+      path: '/officer'
+      fullPath: '/officer'
+      preLoaderRoute: typeof OfficerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/member': {
+      id: '/member'
+      path: '/member'
+      fullPath: '/member'
+      preLoaderRoute: typeof MemberRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,21 +290,151 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/officer/': {
+      id: '/officer/'
+      path: '/'
+      fullPath: '/officer/'
+      preLoaderRoute: typeof OfficerIndexRouteImport
+      parentRoute: typeof OfficerRoute
+    }
+    '/member/': {
+      id: '/member/'
+      path: '/'
+      fullPath: '/member/'
+      preLoaderRoute: typeof MemberIndexRouteImport
+      parentRoute: typeof MemberRoute
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/member/apply-loan': {
+      id: '/member/apply-loan'
+      path: '/apply-loan'
+      fullPath: '/member/apply-loan'
+      preLoaderRoute: typeof MemberApplyLoanRouteImport
+      parentRoute: typeof MemberRoute
+    }
+    '/admin/products': {
+      id: '/admin/products'
+      path: '/products'
+      fullPath: '/admin/products'
+      preLoaderRoute: typeof AdminProductsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/members': {
+      id: '/admin/members'
+      path: '/members'
+      fullPath: '/admin/members'
+      preLoaderRoute: typeof AdminMembersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/loans': {
+      id: '/admin/loans'
+      path: '/loans'
+      fullPath: '/admin/loans'
+      preLoaderRoute: typeof AdminLoansRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/audit': {
+      id: '/admin/audit'
+      path: '/audit'
+      fullPath: '/admin/audit'
+      preLoaderRoute: typeof AdminAuditRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/member/shop/': {
+      id: '/member/shop/'
+      path: '/shop'
+      fullPath: '/member/shop/'
+      preLoaderRoute: typeof MemberShopIndexRouteImport
+      parentRoute: typeof MemberRoute
+    }
+    '/member/loans/': {
+      id: '/member/loans/'
+      path: '/loans'
+      fullPath: '/member/loans/'
+      preLoaderRoute: typeof MemberLoansIndexRouteImport
+      parentRoute: typeof MemberRoute
+    }
+    '/member/shop/$id': {
+      id: '/member/shop/$id'
+      path: '/shop/$id'
+      fullPath: '/member/shop/$id'
+      preLoaderRoute: typeof MemberShopIdRouteImport
+      parentRoute: typeof MemberRoute
+    }
+    '/member/loans/$id': {
+      id: '/member/loans/$id'
+      path: '/loans/$id'
+      fullPath: '/member/loans/$id'
+      preLoaderRoute: typeof MemberLoansIdRouteImport
+      parentRoute: typeof MemberRoute
+    }
   }
 }
 
+interface AdminRouteChildren {
+  AdminAuditRoute: typeof AdminAuditRoute
+  AdminLoansRoute: typeof AdminLoansRoute
+  AdminMembersRoute: typeof AdminMembersRoute
+  AdminProductsRoute: typeof AdminProductsRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminAuditRoute: AdminAuditRoute,
+  AdminLoansRoute: AdminLoansRoute,
+  AdminMembersRoute: AdminMembersRoute,
+  AdminProductsRoute: AdminProductsRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface MemberRouteChildren {
+  MemberApplyLoanRoute: typeof MemberApplyLoanRoute
+  MemberIndexRoute: typeof MemberIndexRoute
+  MemberLoansIdRoute: typeof MemberLoansIdRoute
+  MemberShopIdRoute: typeof MemberShopIdRoute
+  MemberLoansIndexRoute: typeof MemberLoansIndexRoute
+  MemberShopIndexRoute: typeof MemberShopIndexRoute
+}
+
+const MemberRouteChildren: MemberRouteChildren = {
+  MemberApplyLoanRoute: MemberApplyLoanRoute,
+  MemberIndexRoute: MemberIndexRoute,
+  MemberLoansIdRoute: MemberLoansIdRoute,
+  MemberShopIdRoute: MemberShopIdRoute,
+  MemberLoansIndexRoute: MemberLoansIndexRoute,
+  MemberShopIndexRoute: MemberShopIndexRoute,
+}
+
+const MemberRouteWithChildren =
+  MemberRoute._addFileChildren(MemberRouteChildren)
+
+interface OfficerRouteChildren {
+  OfficerIndexRoute: typeof OfficerIndexRoute
+}
+
+const OfficerRouteChildren: OfficerRouteChildren = {
+  OfficerIndexRoute: OfficerIndexRoute,
+}
+
+const OfficerRouteWithChildren =
+  OfficerRoute._addFileChildren(OfficerRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
+  LoginRoute: LoginRoute,
+  MemberRoute: MemberRouteWithChildren,
+  OfficerRoute: OfficerRouteWithChildren,
+  PendingApprovalRoute: PendingApprovalRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}

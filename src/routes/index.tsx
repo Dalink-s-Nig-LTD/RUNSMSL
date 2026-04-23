@@ -10,7 +10,7 @@ import {
 import { Navbar } from "@/components/landing/Navbar";
 import {
   stats, benefits, loanTypes, howItWorksSteps, executives,
-  testimonials, news, galleryImages, faqs, joinSteps,
+  testimonials, news, faqs, joinSteps,
 } from "@/data/landingData";
 import rucsLogo from "@/assets/rucs-logo.png";
 import heroTeam from "@/assets/hero-team.jpg";

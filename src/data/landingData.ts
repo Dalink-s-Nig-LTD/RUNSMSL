@@ -52,15 +52,6 @@ export const news = [
   { date: "February 2026", title: "New Housing Loan Scheme", description: "Up to ₦5M housing support loan for qualifying members." },
 ];
 
-export const galleryImages = [
-  "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=600",
-  "https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&q=80&w=600",
-  "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=600",
-  "https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&fit=crop&q=80&w=600",
-  "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=600",
-  "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&q=80&w=600",
-];
-
 export const faqs = [
   { q: "Who can join RUNSMSL?", a: "All confirmed staff of Redeemer's University with a valid @run.edu.ng email are eligible." },
   { q: "What is the minimum monthly contribution?", a: "₦50,000 per month, deducted from your salary. You can also make voluntary top-ups." },

@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { Navbar } from "@/components/landing/Navbar";
 import {
-  stats, benefits, loanTypes, howItWorksSteps, executives,
+  stats, benefits, loanTypes, executives,
   testimonials, news, faqs, joinSteps,
 } from "@/data/landingData";
 import rucsLogo from "@/assets/rucs-logo.png";
@@ -293,23 +293,6 @@ function LandingPage() {
               </div>
             </CardContent>
           </Card>
-        </div>
-      </Section>
-
-      {/* How It Works */}
-      <Section id="how-it-works">
-        <SectionHeader tag="Process" title="How It Works" sub="Contribute, save, borrow, grow." />
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-          {howItWorksSteps.map((s) => (
-            <div key={s.step} className="text-center">
-              <div className="h-14 w-14 sm:h-16 sm:w-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-3 sm:mb-4">
-                <s.icon className="h-6 w-6 sm:h-7 sm:w-7 text-primary" />
-              </div>
-              <span className="font-heading text-xs font-bold text-primary uppercase tracking-widest">Step {s.step}</span>
-              <h3 className="font-heading text-base sm:text-lg font-semibold text-foreground mt-1 mb-1">{s.title}</h3>
-              <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">{s.description}</p>
-            </div>
-          ))}
         </div>
       </Section>
 

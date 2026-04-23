@@ -26,13 +26,6 @@ export const loanTypes = [
   { title: "Housing & Asset", description: "Acquire household items, electronics, or housing support.", icon: Home, rate: "12%", tenure: "12 months" },
 ];
 
-export const howItWorksSteps = [
-  { step: "01", title: "Join & Contribute", description: "Register and start monthly contributions (min. ₦50,000).", icon: Users },
-  { step: "02", title: "Save & Earn", description: "Your savings earn 5% annual interest, credited quarterly.", icon: PiggyBank },
-  { step: "03", title: "Borrow Affordably", description: "After 3 months, access loans up to 3× your savings at 12% p.a.", icon: HandCoins },
-  { step: "04", title: "Repay & Grow", description: "Repay via monthly deductions. Your limit grows as you save.", icon: TrendingUp },
-];
-
 export const executives = [
   { name: "Prof. Akinwale Thompson", role: "President", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=300&h=300" },
   { name: "Mrs. Folake Adeyemi", role: "Treasurer", image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=300&h=300" },

@@ -402,23 +402,6 @@ function LandingPage() {
         </HScroll>
       </Section>
 
-      {/* Gallery */}
-      <Section>
-        <SectionHeader tag="Gallery" title="Life at RUNSMSL" />
-        <div className="sm:hidden -mx-4 px-4 flex gap-3 overflow-x-auto snap-x snap-mandatory pb-3 scrollbar-hide">
-          {galleryImages.map((img, i) => (
-            <img key={i} src={img} alt={`RUNSMSL event ${i + 1}`} className="rounded-xl shrink-0 w-[75%] aspect-[4/3] object-cover snap-center" loading="lazy" />
-          ))}
-        </div>
-        <div className="hidden sm:grid grid-cols-3 gap-3 sm:gap-4">
-          {galleryImages.map((img, i) => (
-            <div key={i} className="relative overflow-hidden rounded-xl group">
-              <img src={img} alt={`RUNSMSL event ${i + 1}`} className="w-full aspect-[4/3] object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
-            </div>
-          ))}
-        </div>
-      </Section>
-
       {/* FAQs */}
       <Section id="faqs" alt>
         <SectionHeader tag="FAQs" title="Frequently Asked Questions" />

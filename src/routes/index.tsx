@@ -1,10 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import {
-  ArrowRight, CheckCircle, Phone, Mail, MessageCircle, ChevronRight, Star,
+  ArrowRight, CheckCircle, Phone, Mail, MessageCircle, ChevronRight, ChevronLeft, Star,
   Target, Eye, Calendar, HandCoins, PiggyBank, BadgeCheck, Scale,
 } from "lucide-react";
 import { Navbar } from "@/components/landing/Navbar";

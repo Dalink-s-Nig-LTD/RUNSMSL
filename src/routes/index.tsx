@@ -417,13 +417,13 @@ function LandingPage() {
             </Link>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 text-primary-foreground/80 text-sm">
               <a href="tel:+2348012345678" className="flex items-center gap-2 hover:text-primary-foreground transition-colors">
-                <Phone className="h-4 w-4" /> +234 801 234 5678
+                <Phone className="h-4 w-4" /><span>+234 801 234 5678</span>
               </a>
               <a href="mailto:cooperative@run.edu.ng" className="flex items-center gap-2 hover:text-primary-foreground transition-colors">
-                <Mail className="h-4 w-4" /> cooperative@run.edu.ng
+                <Mail className="h-4 w-4" /><span>cooperative@run.edu.ng</span>
               </a>
               <a href="https://wa.me/2348012345678" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary-foreground transition-colors">
-                <MessageCircle className="h-4 w-4" /> WhatsApp
+                <MessageCircle className="h-4 w-4" /><span>WhatsApp</span>
               </a>
             </div>
           </div>

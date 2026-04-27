@@ -4,6 +4,10 @@ import {
 } from "lucide-react";
 import presidentAleDaniel from "@/assets/president-ale-daniel.png";
 import vicePresidentSogaolu from "@/assets/vice-president-sogaolu.png";
+import execGeneralSecretary from "@/assets/exec-general-secretary.png";
+import execRunsmsl1 from "@/assets/exec-runsmsl-1.png";
+import execRunsmsl2 from "@/assets/exec-runsmsl-2.png";
+import execRunsmsl3 from "@/assets/exec-runsmsl-3.png";
 
 export const stats = [
   { value: "2,500+", label: "Active Members", icon: Users },
@@ -31,8 +35,10 @@ export const loanTypes = [
 export const executives = [
   { name: "Mr. Ale Daniel", role: "President", image: presidentAleDaniel },
   { name: "Mrs. Sogaolu", role: "Vice President", image: vicePresidentSogaolu },
-  { name: "Dr. Uche Nwosu", role: "Secretary", image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=300&h=300" },
-  { name: "Mr. Emmanuel Eze", role: "Loan Officer", image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=300&h=300" },
+  { name: "General Secretary", role: "Executive", image: execGeneralSecretary },
+  { name: "Executive Member", role: "Executive", image: execRunsmsl1 },
+  { name: "Executive Member", role: "Executive", image: execRunsmsl2 },
+  { name: "Executive Member", role: "Executive", image: execRunsmsl3 },
 ];
 
 export const testimonials = [

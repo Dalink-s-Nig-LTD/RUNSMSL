@@ -322,19 +322,21 @@ function LandingPage() {
       {/* Leadership */}
       <Section alt>
         <SectionHeader tag="Governance" title="Meet Our Leadership" sub="Elected by members, committed to transparency." />
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-5">
           {executives.map((e) => (
             <Card key={e.name} className="bg-card border-border text-center overflow-hidden group hover:shadow-md transition-shadow">
               <CardContent className="p-0">
-                <img
-                  src={e.image}
-                  alt={e.name}
-                  className="w-full aspect-square object-cover group-hover:scale-105 transition-transform duration-300"
-                  loading="lazy"
-                />
+                <div className="w-full aspect-[3/4] overflow-hidden bg-muted">
+                  <img
+                    src={e.image}
+                    alt={e.name}
+                    className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300"
+                    loading="lazy"
+                  />
+                </div>
                 <div className="p-3 sm:p-4">
-                  <h3 className="font-heading font-semibold text-foreground text-xs sm:text-sm">{e.name}</h3>
-                  <p className="text-xs text-muted-foreground">{e.role}</p>
+                  <h3 className="font-heading font-semibold text-foreground text-xs sm:text-sm leading-tight">{e.name}</h3>
+                  <p className="text-xs text-muted-foreground mt-1">{e.role}</p>
                 </div>
               </CardContent>
             </Card>

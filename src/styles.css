@@ -180,4 +180,24 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+
+  /* Slim, themed horizontal scrollbar for gliders */
+  .scrollbar-slim {
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in oklab, var(--primary) 50%, transparent) transparent;
+  }
+  .scrollbar-slim::-webkit-scrollbar {
+    height: 6px;
+  }
+  .scrollbar-slim::-webkit-scrollbar-track {
+    background: color-mix(in oklab, var(--muted) 60%, transparent);
+    border-radius: 9999px;
+  }
+  .scrollbar-slim::-webkit-scrollbar-thumb {
+    background: color-mix(in oklab, var(--primary) 60%, transparent);
+    border-radius: 9999px;
+  }
+  .scrollbar-slim::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+  }
 }

@@ -3,6 +3,7 @@ import {
   Target, HandCoins, PiggyBank, Clock,
 } from "lucide-react";
 import presidentAleDaniel from "@/assets/president-ale-daniel.png";
+import vicePresidentSogaolu from "@/assets/vice-president-sogaolu.png";
 
 export const stats = [
   { value: "2,500+", label: "Active Members", icon: Users },
@@ -29,7 +30,7 @@ export const loanTypes = [
 
 export const executives = [
   { name: "Mr. Ale Daniel", role: "President", image: presidentAleDaniel },
-  { name: "Mrs. Folake Adeyemi", role: "Treasurer", image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=300&h=300" },
+  { name: "Mrs. Sogaolu", role: "Vice President", image: vicePresidentSogaolu },
   { name: "Dr. Uche Nwosu", role: "Secretary", image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=300&h=300" },
   { name: "Mr. Emmanuel Eze", role: "Loan Officer", image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=300&h=300" },
 ];

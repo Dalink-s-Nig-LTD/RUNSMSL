@@ -392,24 +392,13 @@ function LandingPage() {
       {/* Testimonials */}
       <Section>
         <SectionHeader tag="Testimonials" title="What Members Say" />
-        <HScrollMobile>
+        <Glider ariaLabel="Member testimonials">
           {testimonials.map((t) => (
-            <Card key={t.name} className="bg-card border-border shrink-0 w-[85%] snap-center">
-              <CardContent className="p-5">
-                <div className="flex gap-1 mb-3">
-                  {[...Array(5)].map((_, i) => <Star key={i} className="h-3.5 w-3.5 fill-warning text-warning" />)}
-                </div>
-                <p className="text-muted-foreground text-sm leading-relaxed mb-4 italic">"{t.quote}"</p>
-                <p className="font-heading font-semibold text-foreground text-sm">{t.name}</p>
-                <p className="text-xs text-muted-foreground">{t.role}</p>
-              </CardContent>
-            </Card>
-          ))}
-        </HScrollMobile>
-        <HScroll gridClass="md:grid-cols-3">
-          {testimonials.map((t) => (
-            <Card key={t.name} className="bg-card border-border">
-              <CardContent className="p-6">
+            <Card
+              key={t.name}
+              className="bg-card border-border shrink-0 snap-start w-[85%] sm:w-[360px] md:w-[380px]"
+            >
+              <CardContent className="p-5 sm:p-6">
                 <div className="flex gap-1 mb-3">
                   {[...Array(5)].map((_, i) => <Star key={i} className="h-4 w-4 fill-warning text-warning" />)}
                 </div>
@@ -419,7 +408,7 @@ function LandingPage() {
               </CardContent>
             </Card>
           ))}
-        </HScroll>
+        </Glider>
       </Section>
 
       {/* News */}

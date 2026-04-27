@@ -14,6 +14,7 @@ import {
 } from "@/data/landingData";
 import rucsLogo from "@/assets/rucs-logo.png";
 import heroTeam from "@/assets/hero-team.jpg";
+import aboutTeam from "@/assets/about-team.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -155,21 +156,43 @@ function LandingPage() {
             </div>
           </div>
           <div className="relative">
-            <img
-              src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&q=80&w=800"
-              alt="Team collaboration at Redeemer's University"
-              className="rounded-2xl shadow-lg w-full object-cover aspect-[4/3]"
-              loading="lazy"
-            />
-            <div className="absolute -bottom-5 -left-5 bg-card rounded-xl shadow-lg p-3 border border-border hidden sm:block">
-              <div className="flex items-center gap-3">
-                <div className="h-9 w-9 rounded-full bg-success/10 flex items-center justify-center">
-                  <CheckCircle className="h-4 w-4 text-success" />
-                </div>
+            {/* Decorative gradient frame */}
+            <div className="absolute -inset-2 bg-gradient-to-tr from-primary/30 via-primary/10 to-transparent rounded-3xl blur-2xl opacity-70" aria-hidden />
+            <div className="relative rounded-2xl overflow-hidden shadow-2xl ring-1 ring-border bg-card">
+              <img
+                src={aboutTeam}
+                alt="RUNSMSL executives and members at Redeemer's University"
+                className="w-full object-cover aspect-[16/10]"
+                loading="lazy"
+              />
+              {/* Bottom gradient overlay for caption legibility */}
+              <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/70 to-transparent" />
+              <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between gap-3 text-white">
                 <div>
-                  <p className="font-heading font-bold text-foreground text-sm">15+ Years</p>
-                  <p className="text-xs text-muted-foreground">of trusted service</p>
+                  <p className="font-heading font-semibold text-sm sm:text-base leading-tight">RUNSMSL Executive Team</p>
+                  <p className="text-xs opacity-90">Redeemer's University, Ede</p>
                 </div>
+                <Badge className="bg-white/15 backdrop-blur text-white border border-white/30 hover:bg-white/20">Est. 2010</Badge>
+              </div>
+            </div>
+            {/* Floating trust badge */}
+            <div className="absolute -bottom-5 -left-5 bg-card rounded-xl shadow-lg p-3 border border-border hidden sm:flex items-center gap-3">
+              <div className="h-9 w-9 rounded-full bg-success/10 flex items-center justify-center">
+                <CheckCircle className="h-4 w-4 text-success" />
+              </div>
+              <div>
+                <p className="font-heading font-bold text-foreground text-sm">15+ Years</p>
+                <p className="text-xs text-muted-foreground">of trusted service</p>
+              </div>
+            </div>
+            {/* Floating members badge */}
+            <div className="absolute -top-4 -right-4 bg-card rounded-xl shadow-lg p-3 border border-border hidden sm:flex items-center gap-3">
+              <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center">
+                <Star className="h-4 w-4 text-primary" />
+              </div>
+              <div>
+                <p className="font-heading font-bold text-foreground text-sm">2,500+</p>
+                <p className="text-xs text-muted-foreground">active members</p>
               </div>
             </div>
           </div>

@@ -3,6 +3,7 @@ import {
   Target, HandCoins, PiggyBank, Clock,
 } from "lucide-react";
 import presidentAleDaniel from "@/assets/president-ale-daniel.png";
+import vicePresidentSogaolu from "@/assets/vice-president-sogaolu.png";
 
 export const stats = [
   { value: "2,500+", label: "Active Members", icon: Users },

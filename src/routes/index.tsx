@@ -364,9 +364,12 @@ function LandingPage() {
       {/* Leadership */}
       <Section alt>
         <SectionHeader tag="Governance" title="Meet Our Leadership" sub="Elected by members, committed to transparency." />
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-5">
+        <Glider ariaLabel="RUNSMSL leadership team">
           {executives.map((e) => (
-            <Card key={e.name} className="bg-card border-border text-center overflow-hidden group hover:shadow-md transition-shadow">
+            <Card
+              key={e.name}
+              className="bg-card border-border text-center overflow-hidden group hover:shadow-md transition-shadow shrink-0 snap-start w-[60%] xs:w-[55%] sm:w-[260px] md:w-[240px] lg:w-[220px]"
+            >
               <CardContent className="p-0">
                 <div className="w-full aspect-[3/4] overflow-hidden bg-muted">
                   <img
@@ -383,7 +386,7 @@ function LandingPage() {
               </CardContent>
             </Card>
           ))}
-        </div>
+        </Glider>
       </Section>
 
       {/* Testimonials */}

@@ -1,10 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import {
-  ArrowRight, CheckCircle, Phone, Mail, MessageCircle, ChevronRight, Star,
+  ArrowRight, CheckCircle, Phone, Mail, MessageCircle, ChevronRight, ChevronLeft, Star,
   Target, Eye, Calendar, HandCoins, PiggyBank, BadgeCheck, Scale,
 } from "lucide-react";
 import { Navbar } from "@/components/landing/Navbar";
@@ -50,6 +51,47 @@ const HScrollMobile = ({ children }: { children: React.ReactNode }) => (
     {children}
   </div>
 );
+
+/**
+ * Glider — responsive horizontal slider with snap, slim themed scrollbar,
+ * and prev/next arrow controls (shown on sm+ on hover/focus).
+ */
+const Glider = ({ children, ariaLabel }: { children: React.ReactNode; ariaLabel: string }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const scrollBy = (dir: 1 | -1) => {
+    const el = ref.current;
+    if (!el) return;
+    const amount = Math.max(280, el.clientWidth * 0.8);
+    el.scrollBy({ left: dir * amount, behavior: "smooth" });
+  };
+  return (
+    <div className="relative group/glider">
+      <button
+        type="button"
+        aria-label="Scroll left"
+        onClick={() => scrollBy(-1)}
+        className="hidden sm:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 z-10 h-10 w-10 items-center justify-center rounded-full bg-card/95 backdrop-blur shadow-lg border border-border text-foreground hover:bg-primary hover:text-primary-foreground transition-colors opacity-0 group-hover/glider:opacity-100 focus:opacity-100"
+      >
+        <ChevronLeft className="h-5 w-5" />
+      </button>
+      <button
+        type="button"
+        aria-label="Scroll right"
+        onClick={() => scrollBy(1)}
+        className="hidden sm:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 z-10 h-10 w-10 items-center justify-center rounded-full bg-card/95 backdrop-blur shadow-lg border border-border text-foreground hover:bg-primary hover:text-primary-foreground transition-colors opacity-0 group-hover/glider:opacity-100 focus:opacity-100"
+      >
+        <ChevronRight className="h-5 w-5" />
+      </button>
+      <div
+        ref={ref}
+        aria-label={ariaLabel}
+        className="-mx-4 px-4 sm:mx-0 sm:px-0 flex gap-4 sm:gap-5 overflow-x-auto snap-x snap-mandatory pb-4 scrollbar-slim scroll-smooth"
+      >
+        {children}
+      </div>
+    </div>
+  );
+};
 
 function LandingPage() {
   return (
@@ -322,9 +364,12 @@ function LandingPage() {
       {/* Leadership */}
       <Section alt>
         <SectionHeader tag="Governance" title="Meet Our Leadership" sub="Elected by members, committed to transparency." />
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-5">
+        <Glider ariaLabel="RUNSMSL leadership team">
           {executives.map((e) => (
-            <Card key={e.name} className="bg-card border-border text-center overflow-hidden group hover:shadow-md transition-shadow">
+            <Card
+              key={e.name}
+              className="bg-card border-border text-center overflow-hidden group hover:shadow-md transition-shadow shrink-0 snap-start w-[60%] xs:w-[55%] sm:w-[260px] md:w-[240px] lg:w-[220px]"
+            >
               <CardContent className="p-0">
                 <div className="w-full aspect-[3/4] overflow-hidden bg-muted">
                   <img
@@ -341,30 +386,19 @@ function LandingPage() {
               </CardContent>
             </Card>
           ))}
-        </div>
+        </Glider>
       </Section>
 
       {/* Testimonials */}
       <Section>
         <SectionHeader tag="Testimonials" title="What Members Say" />
-        <HScrollMobile>
+        <Glider ariaLabel="Member testimonials">
           {testimonials.map((t) => (
-            <Card key={t.name} className="bg-card border-border shrink-0 w-[85%] snap-center">
-              <CardContent className="p-5">
-                <div className="flex gap-1 mb-3">
-                  {[...Array(5)].map((_, i) => <Star key={i} className="h-3.5 w-3.5 fill-warning text-warning" />)}
-                </div>
-                <p className="text-muted-foreground text-sm leading-relaxed mb-4 italic">"{t.quote}"</p>
-                <p className="font-heading font-semibold text-foreground text-sm">{t.name}</p>
-                <p className="text-xs text-muted-foreground">{t.role}</p>
-              </CardContent>
-            </Card>
-          ))}
-        </HScrollMobile>
-        <HScroll gridClass="md:grid-cols-3">
-          {testimonials.map((t) => (
-            <Card key={t.name} className="bg-card border-border">
-              <CardContent className="p-6">
+            <Card
+              key={t.name}
+              className="bg-card border-border shrink-0 snap-start w-[85%] sm:w-[360px] md:w-[380px]"
+            >
+              <CardContent className="p-5 sm:p-6">
                 <div className="flex gap-1 mb-3">
                   {[...Array(5)].map((_, i) => <Star key={i} className="h-4 w-4 fill-warning text-warning" />)}
                 </div>
@@ -374,7 +408,7 @@ function LandingPage() {
               </CardContent>
             </Card>
           ))}
-        </HScroll>
+        </Glider>
       </Section>
 
       {/* News */}

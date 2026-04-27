@@ -52,6 +52,47 @@ const HScrollMobile = ({ children }: { children: React.ReactNode }) => (
   </div>
 );
 
+/**
+ * Glider — responsive horizontal slider with snap, slim themed scrollbar,
+ * and prev/next arrow controls (shown on sm+ on hover/focus).
+ */
+const Glider = ({ children, ariaLabel }: { children: React.ReactNode; ariaLabel: string }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const scrollBy = (dir: 1 | -1) => {
+    const el = ref.current;
+    if (!el) return;
+    const amount = Math.max(280, el.clientWidth * 0.8);
+    el.scrollBy({ left: dir * amount, behavior: "smooth" });
+  };
+  return (
+    <div className="relative group/glider">
+      <button
+        type="button"
+        aria-label="Scroll left"
+        onClick={() => scrollBy(-1)}
+        className="hidden sm:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 z-10 h-10 w-10 items-center justify-center rounded-full bg-card/95 backdrop-blur shadow-lg border border-border text-foreground hover:bg-primary hover:text-primary-foreground transition-colors opacity-0 group-hover/glider:opacity-100 focus:opacity-100"
+      >
+        <ChevronLeft className="h-5 w-5" />
+      </button>
+      <button
+        type="button"
+        aria-label="Scroll right"
+        onClick={() => scrollBy(1)}
+        className="hidden sm:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 z-10 h-10 w-10 items-center justify-center rounded-full bg-card/95 backdrop-blur shadow-lg border border-border text-foreground hover:bg-primary hover:text-primary-foreground transition-colors opacity-0 group-hover/glider:opacity-100 focus:opacity-100"
+      >
+        <ChevronRight className="h-5 w-5" />
+      </button>
+      <div
+        ref={ref}
+        aria-label={ariaLabel}
+        className="-mx-4 px-4 sm:mx-0 sm:px-0 flex gap-4 sm:gap-5 overflow-x-auto snap-x snap-mandatory pb-4 scrollbar-slim scroll-smooth"
+      >
+        {children}
+      </div>
+    </div>
+  );
+};
+
 function LandingPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">

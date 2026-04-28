@@ -57,11 +57,12 @@ function OfficerDashboard() {
         ))}
       </div>
 
-      <div className="bg-card rounded-lg border border-border p-0.5 flex w-full sm:w-max">
+      <div className="bg-card rounded-lg border border-border p-0.5 flex flex-wrap w-full sm:w-max">
         {[
           { key: "approvals" as const, label: "Pending Approvals", count: pendingLoans.length },
           { key: "deposits" as const, label: "Record Deposit" },
           { key: "overdue" as const, label: "Overdue Loans", count: mockOverdueLoans.length },
+          { key: "statements" as const, label: "Member Statements" },
         ].map(tab => (
           <button key={tab.key} onClick={() => setActiveTab(tab.key)} className={`flex-1 sm:flex-none px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${activeTab === tab.key ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}>
             {tab.label}

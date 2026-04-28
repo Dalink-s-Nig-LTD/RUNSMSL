@@ -9,10 +9,12 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PendingApprovalRouteImport } from './routes/pending-approval'
 import { Route as OfficerRouteImport } from './routes/officer'
 import { Route as MemberRouteImport } from './routes/member'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as CookiesRouteImport } from './routes/cookies'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as OfficerIndexRouteImport } from './routes/officer.index'
@@ -28,6 +30,11 @@ import { Route as MemberLoansIndexRouteImport } from './routes/member.loans.inde
 import { Route as MemberShopIdRouteImport } from './routes/member.shop.$id'
 import { Route as MemberLoansIdRouteImport } from './routes/member.loans.$id'
 
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PendingApprovalRoute = PendingApprovalRouteImport.update({
   id: '/pending-approval',
   path: '/pending-approval',
@@ -46,6 +53,11 @@ const MemberRoute = MemberRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CookiesRoute = CookiesRouteImport.update({
+  id: '/cookies',
+  path: '/cookies',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminRoute = AdminRouteImport.update({
@@ -122,10 +134,12 @@ const MemberLoansIdRoute = MemberLoansIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/cookies': typeof CookiesRoute
   '/login': typeof LoginRoute
   '/member': typeof MemberRouteWithChildren
   '/officer': typeof OfficerRouteWithChildren
   '/pending-approval': typeof PendingApprovalRoute
+  '/privacy': typeof PrivacyRoute
   '/admin/audit': typeof AdminAuditRoute
   '/admin/loans': typeof AdminLoansRoute
   '/admin/members': typeof AdminMembersRoute
@@ -141,8 +155,10 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/cookies': typeof CookiesRoute
   '/login': typeof LoginRoute
   '/pending-approval': typeof PendingApprovalRoute
+  '/privacy': typeof PrivacyRoute
   '/admin/audit': typeof AdminAuditRoute
   '/admin/loans': typeof AdminLoansRoute
   '/admin/members': typeof AdminMembersRoute
@@ -160,10 +176,12 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/cookies': typeof CookiesRoute
   '/login': typeof LoginRoute
   '/member': typeof MemberRouteWithChildren
   '/officer': typeof OfficerRouteWithChildren
   '/pending-approval': typeof PendingApprovalRoute
+  '/privacy': typeof PrivacyRoute
   '/admin/audit': typeof AdminAuditRoute
   '/admin/loans': typeof AdminLoansRoute
   '/admin/members': typeof AdminMembersRoute
@@ -182,10 +200,12 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/admin'
+    | '/cookies'
     | '/login'
     | '/member'
     | '/officer'
     | '/pending-approval'
+    | '/privacy'
     | '/admin/audit'
     | '/admin/loans'
     | '/admin/members'
@@ -201,8 +221,10 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/cookies'
     | '/login'
     | '/pending-approval'
+    | '/privacy'
     | '/admin/audit'
     | '/admin/loans'
     | '/admin/members'
@@ -219,10 +241,12 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/admin'
+    | '/cookies'
     | '/login'
     | '/member'
     | '/officer'
     | '/pending-approval'
+    | '/privacy'
     | '/admin/audit'
     | '/admin/loans'
     | '/admin/members'
@@ -240,14 +264,23 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
+  CookiesRoute: typeof CookiesRoute
   LoginRoute: typeof LoginRoute
   MemberRoute: typeof MemberRouteWithChildren
   OfficerRoute: typeof OfficerRouteWithChildren
   PendingApprovalRoute: typeof PendingApprovalRoute
+  PrivacyRoute: typeof PrivacyRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/pending-approval': {
       id: '/pending-approval'
       path: '/pending-approval'
@@ -274,6 +307,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cookies': {
+      id: '/cookies'
+      path: '/cookies'
+      fullPath: '/cookies'
+      preLoaderRoute: typeof CookiesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin': {
@@ -430,10 +470,12 @@ const OfficerRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
+  CookiesRoute: CookiesRoute,
   LoginRoute: LoginRoute,
   MemberRoute: MemberRouteWithChildren,
   OfficerRoute: OfficerRouteWithChildren,
   PendingApprovalRoute: PendingApprovalRoute,
+  PrivacyRoute: PrivacyRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

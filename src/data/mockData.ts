@@ -242,6 +242,31 @@ export const mockOverdueLoans = [
   { id: 'od2', member_name: 'Mrs. Grace Obi', email: 'grace.o@run.edu.ng', loan_product: 'Samsung TV', emi_amount: 83125, due_date: '2026-03-25', days_overdue: 19 },
 ];
 
+// ===== MEMBERSHIP APPLICATIONS =====
+export const mockApplications = [
+  { id: 'app1', name: 'Tunde Bakare', email: 'tunde.b@run.edu.ng', staff_id: 'RUN-STAFF-2210', department: 'Computer Science', phone: '+234 803 555 1122', monthly_savings: 50000, status: 'pending' as const, submitted_at: '2026-04-22T09:00:00Z' },
+  { id: 'app2', name: 'Ngozi Eze', email: 'ngozi.e@run.edu.ng', staff_id: 'RUN-STAFF-2231', department: 'Library', phone: '+234 805 222 9090', monthly_savings: 30000, status: 'pending' as const, submitted_at: '2026-04-25T13:30:00Z' },
+  { id: 'app3', name: 'Ibrahim Musa', email: 'ibrahim.m@run.edu.ng', staff_id: 'RUN-STAFF-2240', department: 'Estate Management', phone: '+234 807 100 4455', monthly_savings: 75000, status: 'pending' as const, submitted_at: '2026-04-26T08:15:00Z' },
+  { id: 'app4', name: 'Mary Ojo', email: 'mary.o@run.edu.ng', staff_id: 'RUN-STAFF-2199', department: 'Bursary', phone: '+234 802 113 7766', monthly_savings: 40000, status: 'approved' as const, submitted_at: '2026-04-10T11:00:00Z' },
+];
+
+// ===== ANNOUNCEMENTS / BROADCASTS =====
+export const mockBroadcasts = [
+  { id: 'b1', title: 'AGM 2026 — Save the Date', body: 'Our Annual General Meeting holds on June 14, 2026 at the University Auditorium. All members are required to attend.', audience: 'all', sent_at: '2026-04-20T10:00:00Z', sent_by: 'Mrs. Adaeze' },
+  { id: 'b2', title: 'New Loan Interest Rate', body: 'Effective May 1, 2026, the loan interest rate has been adjusted to 12% per annum. Existing loans are unaffected.', audience: 'members', sent_at: '2026-04-18T15:00:00Z', sent_by: 'Mrs. Adaeze' },
+  { id: 'b3', title: 'End-of-quarter dividends posted', body: 'Q1 2026 interest credits have been posted to your savings balance. Log in to view your statement.', audience: 'members', sent_at: '2026-03-31T17:00:00Z', sent_by: 'Mrs. Adaeze' },
+];
+
+// ===== MONTHLY DISBURSEMENT TREND (for analytics) =====
+export const mockMonthlyDisbursement = [
+  { month: 'Nov', disbursed: 1800000, repaid: 950000 },
+  { month: 'Dec', disbursed: 2400000, repaid: 1100000 },
+  { month: 'Jan', disbursed: 1500000, repaid: 1320000 },
+  { month: 'Feb', disbursed: 3100000, repaid: 1480000 },
+  { month: 'Mar', disbursed: 2200000, repaid: 1620000 },
+  { month: 'Apr', disbursed: 2850000, repaid: 1750000 },
+];
+
 // ===== HELPERS =====
 export const formatCurrency = (amount: number) => {
   return new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' }).format(amount);

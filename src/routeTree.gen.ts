@@ -24,7 +24,9 @@ import { Route as MemberApplyLoanRouteImport } from './routes/member.apply-loan'
 import { Route as AdminProductsRouteImport } from './routes/admin.products'
 import { Route as AdminMembersRouteImport } from './routes/admin.members'
 import { Route as AdminLoansRouteImport } from './routes/admin.loans'
+import { Route as AdminBroadcastRouteImport } from './routes/admin.broadcast'
 import { Route as AdminAuditRouteImport } from './routes/admin.audit'
+import { Route as AdminApplicationsRouteImport } from './routes/admin.applications'
 import { Route as MemberShopIndexRouteImport } from './routes/member.shop.index'
 import { Route as MemberLoansIndexRouteImport } from './routes/member.loans.index'
 import { Route as MemberShopIdRouteImport } from './routes/member.shop.$id'
@@ -105,9 +107,19 @@ const AdminLoansRoute = AdminLoansRouteImport.update({
   path: '/loans',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminBroadcastRoute = AdminBroadcastRouteImport.update({
+  id: '/broadcast',
+  path: '/broadcast',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminAuditRoute = AdminAuditRouteImport.update({
   id: '/audit',
   path: '/audit',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminApplicationsRoute = AdminApplicationsRouteImport.update({
+  id: '/applications',
+  path: '/applications',
   getParentRoute: () => AdminRoute,
 } as any)
 const MemberShopIndexRoute = MemberShopIndexRouteImport.update({
@@ -140,7 +152,9 @@ export interface FileRoutesByFullPath {
   '/officer': typeof OfficerRouteWithChildren
   '/pending-approval': typeof PendingApprovalRoute
   '/privacy': typeof PrivacyRoute
+  '/admin/applications': typeof AdminApplicationsRoute
   '/admin/audit': typeof AdminAuditRoute
+  '/admin/broadcast': typeof AdminBroadcastRoute
   '/admin/loans': typeof AdminLoansRoute
   '/admin/members': typeof AdminMembersRoute
   '/admin/products': typeof AdminProductsRoute
@@ -159,7 +173,9 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/pending-approval': typeof PendingApprovalRoute
   '/privacy': typeof PrivacyRoute
+  '/admin/applications': typeof AdminApplicationsRoute
   '/admin/audit': typeof AdminAuditRoute
+  '/admin/broadcast': typeof AdminBroadcastRoute
   '/admin/loans': typeof AdminLoansRoute
   '/admin/members': typeof AdminMembersRoute
   '/admin/products': typeof AdminProductsRoute
@@ -182,7 +198,9 @@ export interface FileRoutesById {
   '/officer': typeof OfficerRouteWithChildren
   '/pending-approval': typeof PendingApprovalRoute
   '/privacy': typeof PrivacyRoute
+  '/admin/applications': typeof AdminApplicationsRoute
   '/admin/audit': typeof AdminAuditRoute
+  '/admin/broadcast': typeof AdminBroadcastRoute
   '/admin/loans': typeof AdminLoansRoute
   '/admin/members': typeof AdminMembersRoute
   '/admin/products': typeof AdminProductsRoute
@@ -206,7 +224,9 @@ export interface FileRouteTypes {
     | '/officer'
     | '/pending-approval'
     | '/privacy'
+    | '/admin/applications'
     | '/admin/audit'
+    | '/admin/broadcast'
     | '/admin/loans'
     | '/admin/members'
     | '/admin/products'
@@ -225,7 +245,9 @@ export interface FileRouteTypes {
     | '/login'
     | '/pending-approval'
     | '/privacy'
+    | '/admin/applications'
     | '/admin/audit'
+    | '/admin/broadcast'
     | '/admin/loans'
     | '/admin/members'
     | '/admin/products'
@@ -247,7 +269,9 @@ export interface FileRouteTypes {
     | '/officer'
     | '/pending-approval'
     | '/privacy'
+    | '/admin/applications'
     | '/admin/audit'
+    | '/admin/broadcast'
     | '/admin/loans'
     | '/admin/members'
     | '/admin/products'
@@ -379,11 +403,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLoansRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/broadcast': {
+      id: '/admin/broadcast'
+      path: '/broadcast'
+      fullPath: '/admin/broadcast'
+      preLoaderRoute: typeof AdminBroadcastRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/audit': {
       id: '/admin/audit'
       path: '/audit'
       fullPath: '/admin/audit'
       preLoaderRoute: typeof AdminAuditRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/applications': {
+      id: '/admin/applications'
+      path: '/applications'
+      fullPath: '/admin/applications'
+      preLoaderRoute: typeof AdminApplicationsRouteImport
       parentRoute: typeof AdminRoute
     }
     '/member/shop/': {
@@ -418,7 +456,9 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
+  AdminApplicationsRoute: typeof AdminApplicationsRoute
   AdminAuditRoute: typeof AdminAuditRoute
+  AdminBroadcastRoute: typeof AdminBroadcastRoute
   AdminLoansRoute: typeof AdminLoansRoute
   AdminMembersRoute: typeof AdminMembersRoute
   AdminProductsRoute: typeof AdminProductsRoute
@@ -426,7 +466,9 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminApplicationsRoute: AdminApplicationsRoute,
   AdminAuditRoute: AdminAuditRoute,
+  AdminBroadcastRoute: AdminBroadcastRoute,
   AdminLoansRoute: AdminLoansRoute,
   AdminMembersRoute: AdminMembersRoute,
   AdminProductsRoute: AdminProductsRoute,

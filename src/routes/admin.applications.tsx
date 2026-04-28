@@ -8,11 +8,15 @@ export const Route = createFileRoute("/admin/applications")({
   component: AdminApplications,
 });
 
-type App = (typeof mockApplications)[number];
 type AppStatus = "pending" | "approved" | "rejected";
+type App = {
+  id: string; name: string; email: string; staff_id: string;
+  department: string; phone: string; monthly_savings: number;
+  status: AppStatus; submitted_at: string;
+};
 
 function AdminApplications() {
-  const [apps, setApps] = useState<(App & { status: AppStatus })[]>(mockApplications as (App & { status: AppStatus })[]);
+  const [apps, setApps] = useState<App[]>(mockApplications as App[]);
   const [filter, setFilter] = useState<"all" | AppStatus>("pending");
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<App | null>(null);

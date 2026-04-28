@@ -529,8 +529,13 @@ function LandingPage() {
               </div>
             </div>
           </div>
-          <div className="border-t border-primary-foreground/10 pt-5 text-center text-xs text-primary-foreground/40">
-            © {new Date().getFullYear()} Run Staff Cooperative Multipurpose Society Limited. All rights reserved.
+          <div className="border-t border-primary-foreground/10 pt-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-primary-foreground/50">
+            <p>© {new Date().getFullYear()} Run Staff Cooperative Multipurpose Society Limited. All rights reserved.</p>
+            <div className="flex items-center gap-4">
+              <Link to="/privacy" className="hover:text-primary-foreground transition-colors">Privacy Policy</Link>
+              <span className="opacity-30">•</span>
+              <Link to="/cookies" className="hover:text-primary-foreground transition-colors">Cookie Policy</Link>
+            </div>
           </div>
         </div>
       </footer>

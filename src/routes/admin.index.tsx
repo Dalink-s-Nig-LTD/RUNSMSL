@@ -50,9 +50,17 @@ function AdminDashboard() {
           <h1 className="text-xl sm:text-2xl font-heading font-bold text-foreground">Admin Dashboard</h1>
           <p className="text-muted-foreground text-sm mt-1">Platform-wide statistics, settings, and reports.</p>
         </div>
-        <div className="flex gap-2 w-full sm:w-auto">
-          <button onClick={() => navigate({ to: "/admin/members" })} className="flex-1 sm:flex-none px-4 py-2 bg-card border border-border text-foreground rounded-lg text-xs sm:text-sm font-medium hover:bg-secondary transition-colors text-center">Members</button>
-          <button onClick={() => navigate({ to: "/admin/loans" })} className="flex-1 sm:flex-none px-4 py-2 bg-primary text-primary-foreground rounded-lg text-xs sm:text-sm font-medium hover:opacity-90 transition-all text-center">Review Loans</button>
+        <div className="flex flex-wrap gap-2 w-full sm:w-auto">
+          <button onClick={() => navigate({ to: "/admin/applications" })} className="flex-1 sm:flex-none px-3 py-2 bg-card border border-border text-foreground rounded-lg text-xs sm:text-sm font-medium hover:bg-secondary transition-colors inline-flex items-center justify-center gap-1.5">
+            <UserPlus className="w-3.5 h-3.5" /> Applications
+            {mockApplications.filter(a => a.status === "pending").length > 0 && (
+              <span className="ml-1 px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-warning/15 text-warning">{mockApplications.filter(a => a.status === "pending").length}</span>
+            )}
+          </button>
+          <button onClick={() => navigate({ to: "/admin/broadcast" })} className="flex-1 sm:flex-none px-3 py-2 bg-card border border-border text-foreground rounded-lg text-xs sm:text-sm font-medium hover:bg-secondary transition-colors inline-flex items-center justify-center gap-1.5">
+            <Megaphone className="w-3.5 h-3.5" /> Broadcast
+          </button>
+          <button onClick={() => navigate({ to: "/admin/loans" })} className="flex-1 sm:flex-none px-3 py-2 bg-primary text-primary-foreground rounded-lg text-xs sm:text-sm font-medium hover:opacity-90 transition-all">Review Loans</button>
         </div>
       </div>
 

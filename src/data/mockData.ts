@@ -243,11 +243,16 @@ export const mockOverdueLoans = [
 ];
 
 // ===== MEMBERSHIP APPLICATIONS =====
-export const mockApplications = [
-  { id: 'app1', name: 'Tunde Bakare', email: 'tunde.b@run.edu.ng', staff_id: 'RUN-STAFF-2210', department: 'Computer Science', phone: '+234 803 555 1122', monthly_savings: 50000, status: 'pending' as const, submitted_at: '2026-04-22T09:00:00Z' },
-  { id: 'app2', name: 'Ngozi Eze', email: 'ngozi.e@run.edu.ng', staff_id: 'RUN-STAFF-2231', department: 'Library', phone: '+234 805 222 9090', monthly_savings: 30000, status: 'pending' as const, submitted_at: '2026-04-25T13:30:00Z' },
-  { id: 'app3', name: 'Ibrahim Musa', email: 'ibrahim.m@run.edu.ng', staff_id: 'RUN-STAFF-2240', department: 'Estate Management', phone: '+234 807 100 4455', monthly_savings: 75000, status: 'pending' as const, submitted_at: '2026-04-26T08:15:00Z' },
-  { id: 'app4', name: 'Mary Ojo', email: 'mary.o@run.edu.ng', staff_id: 'RUN-STAFF-2199', department: 'Bursary', phone: '+234 802 113 7766', monthly_savings: 40000, status: 'approved' as const, submitted_at: '2026-04-10T11:00:00Z' },
+export type ApplicationStatus = "pending" | "approved" | "rejected";
+export const mockApplications: Array<{
+  id: string; name: string; email: string; staff_id: string;
+  department: string; phone: string; monthly_savings: number;
+  status: ApplicationStatus; submitted_at: string;
+}> = [
+  { id: 'app1', name: 'Tunde Bakare', email: 'tunde.b@run.edu.ng', staff_id: 'RUN-STAFF-2210', department: 'Computer Science', phone: '+234 803 555 1122', monthly_savings: 50000, status: 'pending', submitted_at: '2026-04-22T09:00:00Z' },
+  { id: 'app2', name: 'Ngozi Eze', email: 'ngozi.e@run.edu.ng', staff_id: 'RUN-STAFF-2231', department: 'Library', phone: '+234 805 222 9090', monthly_savings: 30000, status: 'pending', submitted_at: '2026-04-25T13:30:00Z' },
+  { id: 'app3', name: 'Ibrahim Musa', email: 'ibrahim.m@run.edu.ng', staff_id: 'RUN-STAFF-2240', department: 'Estate Management', phone: '+234 807 100 4455', monthly_savings: 75000, status: 'pending', submitted_at: '2026-04-26T08:15:00Z' },
+  { id: 'app4', name: 'Mary Ojo', email: 'mary.o@run.edu.ng', staff_id: 'RUN-STAFF-2199', department: 'Bursary', phone: '+234 802 113 7766', monthly_savings: 40000, status: 'approved', submitted_at: '2026-04-10T11:00:00Z' },
 ];
 
 // ===== ANNOUNCEMENTS / BROADCASTS =====

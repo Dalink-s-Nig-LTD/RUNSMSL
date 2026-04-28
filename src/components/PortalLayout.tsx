@@ -64,8 +64,10 @@ export const PortalLayout = ({ role }: { role: Role }) => {
   const adminLinks = [
     { name: "Overview", path: "/admin", icon: LayoutDashboard },
     { name: "Loan Requests", path: "/admin/loans", icon: CreditCard },
+    { name: "Applications", path: "/admin/applications", icon: UserPlus },
     { name: "Products", path: "/admin/products", icon: Box },
     { name: "Members", path: "/admin/members", icon: Users },
+    { name: "Broadcast", path: "/admin/broadcast", icon: Megaphone },
     { name: "Audit Log", path: "/admin/audit", icon: FileText },
   ];
 

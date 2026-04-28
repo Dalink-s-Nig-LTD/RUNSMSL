@@ -15,6 +15,16 @@ function OfficerDashboard() {
   const [depositForm, setDepositForm] = useState({ member_id: "", amount: "", payment_method: "cash", reference: "" });
   const [interestRate, setInterestRate] = useState("12");
   const [rejectionReason, setRejectionReason] = useState("");
+  const [statementMemberId, setStatementMemberId] = useState<string>("");
+
+  const memberOptions = mockMembers.filter(m => m.role === "member" || m.role === "treasurer");
+  const selectedMember = useMemo(() => memberOptions.find(m => m.id === statementMemberId), [statementMemberId, memberOptions]);
+  const memberLoans = useMemo(() => mockLoans.filter(l => l.member_id === statementMemberId), [statementMemberId]);
+  const memberTxns = useMemo(() => mockTransactions.filter(t => t.member_id === statementMemberId), [statementMemberId]);
+  const memberContribs = useMemo(() => mockContributions.filter(c => c.member_id === statementMemberId), [statementMemberId]);
+  const totalContributed = memberContribs.reduce((s, c) => s + c.amount, 0);
+  const totalRepayments = memberTxns.filter(t => t.type === "loan_repayment").reduce((s, t) => s + Math.abs(t.amount), 0);
+  const handlePrintStatement = () => window.print();
 
   const stats = [
     { label: "Pending Requests", value: pendingLoans.length, icon: Clock, color: "text-warning bg-warning/10" },

@@ -4,6 +4,7 @@ import {
   LayoutDashboard, ShoppingBag, CreditCard, Bell, LogOut,
   Users, Box, FileText, CheckCircle, Info, AlertCircle,
   Sun, Moon, Menu, X, ClipboardCheck, DollarSign, AlertTriangle,
+  UserPlus, Megaphone,
 } from "lucide-react";
 import { mockUser, mockAdmin, mockOfficer } from "@/data/mockData";
 import rucsLogo from "@/assets/rucs-logo.png";

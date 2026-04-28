@@ -4,6 +4,7 @@ import {
   LayoutDashboard, ShoppingBag, CreditCard, Bell, LogOut,
   Users, Box, FileText, CheckCircle, Info, AlertCircle,
   Sun, Moon, Menu, X, ClipboardCheck, DollarSign, AlertTriangle,
+  UserPlus, Megaphone,
 } from "lucide-react";
 import { mockUser, mockAdmin, mockOfficer } from "@/data/mockData";
 import rucsLogo from "@/assets/rucs-logo.png";
@@ -63,8 +64,10 @@ export const PortalLayout = ({ role }: { role: Role }) => {
   const adminLinks = [
     { name: "Overview", path: "/admin", icon: LayoutDashboard },
     { name: "Loan Requests", path: "/admin/loans", icon: CreditCard },
+    { name: "Applications", path: "/admin/applications", icon: UserPlus },
     { name: "Products", path: "/admin/products", icon: Box },
     { name: "Members", path: "/admin/members", icon: Users },
+    { name: "Broadcast", path: "/admin/broadcast", icon: Megaphone },
     { name: "Audit Log", path: "/admin/audit", icon: FileText },
   ];
 

@@ -1,20 +1,30 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
-import { mockLoans, mockOverdueLoans, mockMembers, formatCurrency } from "@/data/mockData";
-import { CheckCircle, XCircle, Clock, AlertTriangle, DollarSign, Users, FileText } from "lucide-react";
+import { useState, useMemo } from "react";
+import { mockLoans, mockOverdueLoans, mockMembers, mockTransactions, mockContributions, formatCurrency } from "@/data/mockData";
+import { CheckCircle, XCircle, Clock, AlertTriangle, DollarSign, Users, FileText, Printer, Send } from "lucide-react";
 
 export const Route = createFileRoute("/officer/")({ component: OfficerDashboard });
 
 type LoanItem = (typeof mockLoans)[number];
 
 function OfficerDashboard() {
-  const [activeTab, setActiveTab] = useState<"approvals" | "deposits" | "overdue">("approvals");
+  const [activeTab, setActiveTab] = useState<"approvals" | "deposits" | "overdue" | "statements">("approvals");
   const pendingLoans = mockLoans.filter(l => l.status === "pending");
   const activeLoans = mockLoans.filter(l => l.status === "active");
   const [approvalDialog, setApprovalDialog] = useState<{ loan: LoanItem; action: "approve" | "reject" } | null>(null);
   const [depositForm, setDepositForm] = useState({ member_id: "", amount: "", payment_method: "cash", reference: "" });
   const [interestRate, setInterestRate] = useState("12");
   const [rejectionReason, setRejectionReason] = useState("");
+  const [statementMemberId, setStatementMemberId] = useState<string>("");
+
+  const memberOptions = mockMembers.filter(m => m.role === "member" || m.role === "treasurer");
+  const selectedMember = useMemo(() => memberOptions.find(m => m.id === statementMemberId), [statementMemberId, memberOptions]);
+  const memberLoans = useMemo(() => mockLoans.filter(l => l.member_id === statementMemberId), [statementMemberId]);
+  const memberTxns = useMemo(() => mockTransactions.filter(t => t.member_id === statementMemberId), [statementMemberId]);
+  const memberContribs = useMemo(() => mockContributions.filter(c => c.member_id === statementMemberId), [statementMemberId]);
+  const totalContributed = memberContribs.reduce((s, c) => s + c.amount, 0);
+  const totalRepayments = memberTxns.filter(t => t.type === "loan_repayment").reduce((s, t) => s + Math.abs(t.amount), 0);
+  const handlePrintStatement = () => window.print();
 
   const stats = [
     { label: "Pending Requests", value: pendingLoans.length, icon: Clock, color: "text-warning bg-warning/10" },
@@ -47,11 +57,12 @@ function OfficerDashboard() {
         ))}
       </div>
 
-      <div className="bg-card rounded-lg border border-border p-0.5 flex w-full sm:w-max">
+      <div className="bg-card rounded-lg border border-border p-0.5 flex flex-wrap w-full sm:w-max">
         {[
           { key: "approvals" as const, label: "Pending Approvals", count: pendingLoans.length },
           { key: "deposits" as const, label: "Record Deposit" },
           { key: "overdue" as const, label: "Overdue Loans", count: mockOverdueLoans.length },
+          { key: "statements" as const, label: "Member Statements" },
         ].map(tab => (
           <button key={tab.key} onClick={() => setActiveTab(tab.key)} className={`flex-1 sm:flex-none px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${activeTab === tab.key ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}>
             {tab.label}
@@ -235,6 +246,125 @@ function OfficerDashboard() {
                 </table>
               </div>
             </>
+          )}
+        </div>
+      )}
+
+      {activeTab === "statements" && (
+        <div className="space-y-4">
+          <div className="bg-card rounded-xl border border-border p-4 sm:p-5 print:hidden">
+            <div className="flex items-center gap-2 mb-3">
+              <FileText className="w-5 h-5 text-primary" />
+              <h2 className="font-heading font-bold text-foreground">Generate Member Statement</h2>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-3 sm:items-end">
+              <div className="flex-1">
+                <label className="block text-xs font-medium text-muted-foreground mb-1.5">Select Member</label>
+                <select value={statementMemberId} onChange={e => setStatementMemberId(e.target.value)} className="w-full px-3 py-2.5 bg-card border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 appearance-none">
+                  <option value="">Choose a member...</option>
+                  {memberOptions.map(m => <option key={m.id} value={m.id}>{m.name} — {m.email}</option>)}
+                </select>
+              </div>
+              <button onClick={handlePrintStatement} disabled={!selectedMember} className="flex items-center justify-center gap-2 px-4 py-2.5 bg-primary text-primary-foreground rounded-lg text-sm font-bold hover:opacity-90 transition-all disabled:opacity-40">
+                <Printer className="w-4 h-4" /> Print / PDF
+              </button>
+            </div>
+          </div>
+
+          {selectedMember && (
+            <div id="statement-print" className="bg-card rounded-xl border border-border p-5 sm:p-8 print:border-0 print:shadow-none">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 pb-5 border-b border-border">
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-primary">RUNSMSL</p>
+                  <h2 className="text-lg sm:text-xl font-heading font-bold text-foreground mt-1">Member Statement</h2>
+                  <p className="text-xs text-muted-foreground mt-0.5">Generated {new Date().toLocaleDateString("en-US", { day: "numeric", month: "long", year: "numeric" })}</p>
+                </div>
+                <div className="text-left sm:text-right">
+                  <p className="text-sm font-semibold text-foreground">{selectedMember.name}</p>
+                  <p className="text-xs text-muted-foreground">{selectedMember.email}</p>
+                  <p className="text-[10px] text-muted-foreground uppercase tracking-wider mt-1">Joined {new Date(selectedMember.joined).toLocaleDateString("en-US", { month: "short", year: "numeric" })}</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 my-5">
+                <div className="p-3 rounded-lg bg-success/10 border border-success/20">
+                  <p className="text-[10px] text-success font-bold uppercase tracking-wider">Savings Balance</p>
+                  <p className="text-sm sm:text-base font-heading font-bold text-foreground mt-1">{formatCurrency(selectedMember.savings_balance)}</p>
+                </div>
+                <div className="p-3 rounded-lg bg-warning/10 border border-warning/20">
+                  <p className="text-[10px] text-warning font-bold uppercase tracking-wider">Outstanding Loans</p>
+                  <p className="text-sm sm:text-base font-heading font-bold text-foreground mt-1">{formatCurrency(selectedMember.total_loan_balance)}</p>
+                </div>
+                <div className="p-3 rounded-lg bg-primary/10 border border-primary/20">
+                  <p className="text-[10px] text-primary font-bold uppercase tracking-wider">Contributions YTD</p>
+                  <p className="text-sm sm:text-base font-heading font-bold text-foreground mt-1">{formatCurrency(totalContributed)}</p>
+                </div>
+                <div className="p-3 rounded-lg bg-secondary border border-border">
+                  <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">Loan Repayments</p>
+                  <p className="text-sm sm:text-base font-heading font-bold text-foreground mt-1">{formatCurrency(totalRepayments)}</p>
+                </div>
+              </div>
+
+              <div className="mt-5">
+                <h3 className="text-sm font-heading font-semibold text-foreground mb-2">Loan History</h3>
+                {memberLoans.length === 0 ? (
+                  <p className="text-xs text-muted-foreground italic">No loan history.</p>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left text-xs">
+                      <thead><tr className="border-b border-border text-muted-foreground">
+                        <th className="py-2 pr-3 font-semibold uppercase tracking-wider text-[10px]">Product</th>
+                        <th className="py-2 pr-3 font-semibold uppercase tracking-wider text-[10px]">Amount</th>
+                        <th className="py-2 pr-3 font-semibold uppercase tracking-wider text-[10px]">Paid</th>
+                        <th className="py-2 pr-3 font-semibold uppercase tracking-wider text-[10px]">Status</th>
+                        <th className="py-2 font-semibold uppercase tracking-wider text-[10px]">Date</th>
+                      </tr></thead>
+                      <tbody className="divide-y divide-border">
+                        {memberLoans.map(l => (
+                          <tr key={l.id}>
+                            <td className="py-2 pr-3 text-foreground">{l.product.name}</td>
+                            <td className="py-2 pr-3 text-foreground">{formatCurrency(l.total_loan_amount)}</td>
+                            <td className="py-2 pr-3 text-foreground">{formatCurrency(l.amount_paid)}</td>
+                            <td className="py-2 pr-3 capitalize">{l.status}</td>
+                            <td className="py-2 text-muted-foreground">{new Date(l.created_at).toLocaleDateString()}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-5">
+                <h3 className="text-sm font-heading font-semibold text-foreground mb-2">Recent Transactions</h3>
+                {memberTxns.length === 0 ? (
+                  <p className="text-xs text-muted-foreground italic">No transactions on file.</p>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left text-xs">
+                      <thead><tr className="border-b border-border text-muted-foreground">
+                        <th className="py-2 pr-3 font-semibold uppercase tracking-wider text-[10px]">Description</th>
+                        <th className="py-2 pr-3 font-semibold uppercase tracking-wider text-[10px]">Reference</th>
+                        <th className="py-2 pr-3 font-semibold uppercase tracking-wider text-[10px]">Date</th>
+                        <th className="py-2 text-right font-semibold uppercase tracking-wider text-[10px]">Amount</th>
+                      </tr></thead>
+                      <tbody className="divide-y divide-border">
+                        {memberTxns.map(t => (
+                          <tr key={t.id}>
+                            <td className="py-2 pr-3 text-foreground">{t.title}</td>
+                            <td className="py-2 pr-3 text-muted-foreground">{t.reference}</td>
+                            <td className="py-2 pr-3 text-muted-foreground">{t.date}</td>
+                            <td className={`py-2 text-right font-semibold ${t.amount < 0 ? "text-destructive" : "text-success"}`}>{t.amount < 0 ? "-" : "+"}{formatCurrency(Math.abs(t.amount))}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+
+              <p className="text-[10px] text-muted-foreground italic mt-6 pt-4 border-t border-border">This statement is computer generated and does not require a signature. For queries, contact the cooperative office.</p>
+            </div>
           )}
         </div>
       )}

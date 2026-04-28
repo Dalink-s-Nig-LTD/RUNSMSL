@@ -1,8 +1,8 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { formatCurrency, mockLoans, mockMembers, mockSettings } from "@/data/mockData";
-import { Users, FileText, CheckCircle, Clock, AlertCircle, Settings, Download, TrendingUp, Shield } from "lucide-react";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer } from "recharts";
+import { formatCurrency, mockLoans, mockMembers, mockSettings, mockApplications, mockMonthlyDisbursement } from "@/data/mockData";
+import { Users, FileText, CheckCircle, Clock, AlertCircle, Settings, Download, TrendingUp, Shield, UserPlus, Megaphone } from "lucide-react";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, LineChart, Line, Legend } from "recharts";
 
 export const Route = createFileRoute("/admin/")({ component: AdminDashboard });
 
@@ -50,9 +50,17 @@ function AdminDashboard() {
           <h1 className="text-xl sm:text-2xl font-heading font-bold text-foreground">Admin Dashboard</h1>
           <p className="text-muted-foreground text-sm mt-1">Platform-wide statistics, settings, and reports.</p>
         </div>
-        <div className="flex gap-2 w-full sm:w-auto">
-          <button onClick={() => navigate({ to: "/admin/members" })} className="flex-1 sm:flex-none px-4 py-2 bg-card border border-border text-foreground rounded-lg text-xs sm:text-sm font-medium hover:bg-secondary transition-colors text-center">Members</button>
-          <button onClick={() => navigate({ to: "/admin/loans" })} className="flex-1 sm:flex-none px-4 py-2 bg-primary text-primary-foreground rounded-lg text-xs sm:text-sm font-medium hover:opacity-90 transition-all text-center">Review Loans</button>
+        <div className="flex flex-wrap gap-2 w-full sm:w-auto">
+          <button onClick={() => navigate({ to: "/admin/applications" })} className="flex-1 sm:flex-none px-3 py-2 bg-card border border-border text-foreground rounded-lg text-xs sm:text-sm font-medium hover:bg-secondary transition-colors inline-flex items-center justify-center gap-1.5">
+            <UserPlus className="w-3.5 h-3.5" /> Applications
+            {mockApplications.filter(a => a.status === "pending").length > 0 && (
+              <span className="ml-1 px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-warning/15 text-warning">{mockApplications.filter(a => a.status === "pending").length}</span>
+            )}
+          </button>
+          <button onClick={() => navigate({ to: "/admin/broadcast" })} className="flex-1 sm:flex-none px-3 py-2 bg-card border border-border text-foreground rounded-lg text-xs sm:text-sm font-medium hover:bg-secondary transition-colors inline-flex items-center justify-center gap-1.5">
+            <Megaphone className="w-3.5 h-3.5" /> Broadcast
+          </button>
+          <button onClick={() => navigate({ to: "/admin/loans" })} className="flex-1 sm:flex-none px-3 py-2 bg-primary text-primary-foreground rounded-lg text-xs sm:text-sm font-medium hover:opacity-90 transition-all">Review Loans</button>
         </div>
       </div>
 
@@ -175,7 +183,7 @@ function AdminDashboard() {
       )}
 
       {activeTab === "reports" && (
-        <div className="space-y-4 max-w-2xl">
+        <div className="space-y-4">
           <div className="bg-card rounded-xl border border-border p-5 sm:p-6">
             <div className="flex items-center gap-2 mb-4">
               <Shield className="w-5 h-5 text-primary" />
@@ -193,6 +201,65 @@ function AdminDashboard() {
               <div className="p-4 bg-primary/10 rounded-lg border border-primary/20">
                 <p className="text-[10px] text-primary font-medium uppercase tracking-wider">Net Position</p>
                 <p className="text-lg font-heading font-bold text-foreground mt-1">{formatCurrency(totalSavings - totalOutstanding)}</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-card rounded-xl border border-border p-5 sm:p-6">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-sm font-heading font-semibold text-foreground">Disbursements vs Repayments (6mo)</h3>
+              <span className="text-[10px] text-muted-foreground uppercase tracking-wider">₦</span>
+            </div>
+            <div className="h-[260px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={mockMonthlyDisbursement} margin={{ top: 5, right: 10, left: -10, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
+                  <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} />
+                  <YAxis axisLine={false} tickLine={false} tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} tickFormatter={v => `${(v / 1000000).toFixed(1)}M`} />
+                  <RechartsTooltip contentStyle={{ borderRadius: 8, border: "1px solid var(--border)", fontSize: 12, background: "var(--card)" }} formatter={(v: number) => formatCurrency(v)} />
+                  <Legend wrapperStyle={{ fontSize: 11 }} />
+                  <Line type="monotone" dataKey="disbursed" stroke="var(--primary)" strokeWidth={2.5} dot={{ r: 3 }} name="Disbursed" />
+                  <Line type="monotone" dataKey="repaid" stroke="var(--success, #16a34a)" strokeWidth={2.5} dot={{ r: 3 }} name="Repaid" />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div className="bg-card rounded-xl border border-border p-5 sm:p-6">
+              <h3 className="text-sm font-heading font-semibold text-foreground mb-3">Top Borrowers</h3>
+              <div className="space-y-2">
+                {[...mockMembers].filter(m => m.total_loan_balance > 0).sort((a, b) => b.total_loan_balance - a.total_loan_balance).slice(0, 5).map((m, i) => (
+                  <div key={m.id} className="flex items-center justify-between p-2.5 rounded-lg bg-secondary/30 border border-border">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <span className="w-6 h-6 rounded-full bg-primary/15 text-primary text-[10px] font-bold flex items-center justify-center shrink-0">{i + 1}</span>
+                      <div className="min-w-0">
+                        <p className="text-sm font-semibold text-foreground truncate">{m.name}</p>
+                        <p className="text-[10px] text-muted-foreground capitalize">{m.role.replace("_", " ")}</p>
+                      </div>
+                    </div>
+                    <p className="text-sm font-heading font-bold text-foreground">{formatCurrency(m.total_loan_balance)}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="bg-card rounded-xl border border-border p-5 sm:p-6">
+              <h3 className="text-sm font-heading font-semibold text-foreground mb-3">Loans by Status</h3>
+              <div className="h-[220px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={[
+                    { name: "Pending", value: mockLoans.filter(l => l.status === "pending").length },
+                    { name: "Active", value: mockLoans.filter(l => l.status === "active").length },
+                    { name: "Cleared", value: mockLoans.filter(l => l.status === "cleared").length },
+                  ]} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
+                    <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} />
+                    <YAxis axisLine={false} tickLine={false} tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} allowDecimals={false} />
+                    <RechartsTooltip cursor={{ fill: "var(--secondary)" }} contentStyle={{ borderRadius: 8, border: "1px solid var(--border)", fontSize: 12, background: "var(--card)" }} />
+                    <Bar dataKey="value" fill="var(--primary)" radius={[4, 4, 0, 0]} barSize={42} />
+                  </BarChart>
+                </ResponsiveContainer>
               </div>
             </div>
           </div>

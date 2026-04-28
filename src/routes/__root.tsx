@@ -1,4 +1,4 @@
-import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
+import { Outlet, Link, createRootRoute } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
 import { CookieConsent } from "@/components/CookieConsent";
@@ -31,17 +31,14 @@ export const Route = createRootRoute({
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "RUNSMSL" },
-      { name: "description", content: "RUN Cooperative Society" },
-      { name: "author", content: "Lovable" },
+      { name: "description", content: "RUN Cooperative Society - Run Staff Cooperative Multipurpose Society Limited" },
+      { name: "author", content: "RUNSMSL" },
       { property: "og:title", content: "RUNSMSL" },
-      { property: "og:description", content: "RUN Cooperative Society" },
+      { property: "og:description", content: "RUN Cooperative Society - Run Staff Cooperative Multipurpose Society Limited" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
       { name: "twitter:title", content: "RUNSMSL" },
       { name: "twitter:description", content: "RUN Cooperative Society" },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/fe45b0c9-c564-4aac-ba08-1d6f35ba2fbe/id-preview-47a2046b--635679bf-4c7f-4864-ac0c-6e18f11ecac2.lovable.app-1777284352185.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/fe45b0c9-c564-4aac-ba08-1d6f35ba2fbe/id-preview-47a2046b--635679bf-4c7f-4864-ac0c-6e18f11ecac2.lovable.app-1777284352185.png" },
     ],
     links: [
       {
@@ -50,24 +47,9 @@ export const Route = createRootRoute({
       },
     ],
   }),
-  shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
 });
-
-function RootShell({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="en">
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        {children}
-        <Scripts />
-      </body>
-    </html>
-  );
-}
 
 function RootComponent() {
   return (

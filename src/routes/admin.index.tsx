@@ -1,8 +1,8 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { formatCurrency, mockLoans, mockMembers, mockSettings } from "@/data/mockData";
-import { Users, FileText, CheckCircle, Clock, AlertCircle, Settings, Download, TrendingUp, Shield } from "lucide-react";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer } from "recharts";
+import { formatCurrency, mockLoans, mockMembers, mockSettings, mockApplications, mockMonthlyDisbursement } from "@/data/mockData";
+import { Users, FileText, CheckCircle, Clock, AlertCircle, Settings, Download, TrendingUp, Shield, UserPlus, Megaphone } from "lucide-react";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, LineChart, Line, Legend } from "recharts";
 
 export const Route = createFileRoute("/admin/")({ component: AdminDashboard });
 

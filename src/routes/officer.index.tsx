@@ -1,14 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
-import { mockLoans, mockOverdueLoans, mockMembers, formatCurrency } from "@/data/mockData";
-import { CheckCircle, XCircle, Clock, AlertTriangle, DollarSign, Users, FileText } from "lucide-react";
+import { useState, useMemo } from "react";
+import { mockLoans, mockOverdueLoans, mockMembers, mockTransactions, mockContributions, formatCurrency } from "@/data/mockData";
+import { CheckCircle, XCircle, Clock, AlertTriangle, DollarSign, Users, FileText, Printer, Send } from "lucide-react";
 
 export const Route = createFileRoute("/officer/")({ component: OfficerDashboard });
 
 type LoanItem = (typeof mockLoans)[number];
 
 function OfficerDashboard() {
-  const [activeTab, setActiveTab] = useState<"approvals" | "deposits" | "overdue">("approvals");
+  const [activeTab, setActiveTab] = useState<"approvals" | "deposits" | "overdue" | "statements">("approvals");
   const pendingLoans = mockLoans.filter(l => l.status === "pending");
   const activeLoans = mockLoans.filter(l => l.status === "active");
   const [approvalDialog, setApprovalDialog] = useState<{ loan: LoanItem; action: "approve" | "reject" } | null>(null);

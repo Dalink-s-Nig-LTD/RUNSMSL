@@ -21,7 +21,7 @@ export const Navbar = () => {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-card/80 backdrop-blur-lg border-b border-border">
       <div className="container mx-auto flex items-center justify-between h-14 sm:h-16 px-4 lg:px-8">
         <Link to="/" className="flex items-center gap-2">
-          <img src={rucsLogo} alt="RUNSMSL" className="h-9 w-9 object-contain" />
+          <img src={rucsLogo} alt="RUNSMSL — Run Staff Cooperative Multipurpose Society Limited" className="h-9 w-9 object-contain" />
           <span className="font-heading text-base sm:text-lg font-bold text-foreground">RUNSMSL</span>
         </Link>
 
@@ -42,14 +42,14 @@ export const Navbar = () => {
           </Link>
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild className="lg:hidden">
-              <Button variant="ghost" size="icon" className="h-9 w-9">
+              <Button variant="ghost" size="icon" className="h-9 w-9" aria-label="Toggle menu">
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-[280px]">
               <SheetHeader>
                 <SheetTitle className="text-left flex items-center gap-2">
-                  <img src={rucsLogo} alt="RUNSMSL" className="h-8 w-8 object-contain" />
+                  <img src={rucsLogo} alt="RUNSMSL — Run Staff Cooperative Multipurpose Society Limited" className="h-8 w-8 object-contain" />
                   RUNSMSL
                 </SheetTitle>
               </SheetHeader>

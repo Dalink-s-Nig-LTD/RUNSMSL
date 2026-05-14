@@ -14,7 +14,7 @@ function PendingApprovalPage() {
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <div className="max-w-md w-full text-center space-y-6">
         <div className="flex justify-center">
-          <img src={rucsLogo} alt="RUCS" className="w-16 h-16 object-contain" />
+          <img src={rucsLogo} alt="RUNSMSL — Run Staff Cooperative Multipurpose Society Limited" className="w-16 h-16 object-contain" />
         </div>
         <div className="bg-card rounded-xl border border-border p-8 space-y-5">
           <div className="w-16 h-16 mx-auto rounded-full bg-warning/10 flex items-center justify-center">

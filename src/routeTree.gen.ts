@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PendingApprovalRouteImport } from './routes/pending-approval'
 import { Route as OfficerRouteImport } from './routes/officer'
@@ -32,6 +33,11 @@ import { Route as MemberLoansIndexRouteImport } from './routes/member.loans.inde
 import { Route as MemberShopIdRouteImport } from './routes/member.shop.$id'
 import { Route as MemberLoansIdRouteImport } from './routes/member.loans.$id'
 
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
@@ -152,6 +158,7 @@ export interface FileRoutesByFullPath {
   '/officer': typeof OfficerRouteWithChildren
   '/pending-approval': typeof PendingApprovalRoute
   '/privacy': typeof PrivacyRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/audit': typeof AdminAuditRoute
   '/admin/broadcast': typeof AdminBroadcastRoute
@@ -173,6 +180,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/pending-approval': typeof PendingApprovalRoute
   '/privacy': typeof PrivacyRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/audit': typeof AdminAuditRoute
   '/admin/broadcast': typeof AdminBroadcastRoute
@@ -198,6 +206,7 @@ export interface FileRoutesById {
   '/officer': typeof OfficerRouteWithChildren
   '/pending-approval': typeof PendingApprovalRoute
   '/privacy': typeof PrivacyRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/audit': typeof AdminAuditRoute
   '/admin/broadcast': typeof AdminBroadcastRoute
@@ -224,6 +233,7 @@ export interface FileRouteTypes {
     | '/officer'
     | '/pending-approval'
     | '/privacy'
+    | '/sitemap.xml'
     | '/admin/applications'
     | '/admin/audit'
     | '/admin/broadcast'
@@ -245,6 +255,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/pending-approval'
     | '/privacy'
+    | '/sitemap.xml'
     | '/admin/applications'
     | '/admin/audit'
     | '/admin/broadcast'
@@ -269,6 +280,7 @@ export interface FileRouteTypes {
     | '/officer'
     | '/pending-approval'
     | '/privacy'
+    | '/sitemap.xml'
     | '/admin/applications'
     | '/admin/audit'
     | '/admin/broadcast'
@@ -294,10 +306,18 @@ export interface RootRouteChildren {
   OfficerRoute: typeof OfficerRouteWithChildren
   PendingApprovalRoute: typeof PendingApprovalRoute
   PrivacyRoute: typeof PrivacyRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/privacy': {
       id: '/privacy'
       path: '/privacy'
@@ -518,16 +538,8 @@ const rootRouteChildren: RootRouteChildren = {
   OfficerRoute: OfficerRouteWithChildren,
   PendingApprovalRoute: PendingApprovalRoute,
   PrivacyRoute: PrivacyRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}

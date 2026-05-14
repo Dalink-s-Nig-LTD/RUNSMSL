@@ -6,7 +6,13 @@ export const Route = createFileRoute("/login")({
   head: () => ({
     meta: [
       { title: "Sign In — RUNSMSL" },
-      { name: "description", content: "Sign in to RUNSMSL with your @run.edu.ng institutional Google account." },
+      { name: "description", content: "Sign in to RUNSMSL with your @run.edu.ng institutional Google account to access your cooperative dashboard." },
+      { property: "og:title", content: "Sign In — RUNSMSL" },
+      { property: "og:description", content: "Member sign-in for the Run Staff Cooperative Multipurpose Society Limited." },
+      { property: "og:url", content: "https://runsmsl.lovable.app/login" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://runsmsl.lovable.app/login" },
     ],
   }),
   component: LoginPage,
@@ -21,17 +27,17 @@ function LoginPage() {
         <div className="absolute inset-0 bg-gradient-to-br from-transparent via-ocean-mid/30 to-ocean-accent/10" />
         <div className="relative z-10">
           <div className="flex items-center gap-3 mb-2">
-            <img src={rucsLogo} alt="RUNSMSL Logo" className="w-12 h-12 object-contain drop-shadow-lg" />
+            <img src={rucsLogo} alt="RUNSMSL — Run Staff Cooperative Multipurpose Society Limited" className="w-12 h-12 object-contain drop-shadow-lg" />
             <span className="font-heading font-bold text-xl tracking-tight">RUNSMSL</span>
           </div>
-          <p className="text-sm text-white/50 font-medium">Run Staff Cooperative Multipurpose Society Limited</p>
+          <p className="text-sm text-white/75 font-medium">Run Staff Cooperative Multipurpose Society Limited</p>
         </div>
 
         <div className="relative z-10 space-y-8">
           <h1 className="font-heading text-3xl xl:text-4xl font-bold leading-tight">
             Your cooperative,<br />digitally empowered.
           </h1>
-          <p className="text-white/60 text-base leading-relaxed max-w-sm">
+          <p className="text-white/80 text-base leading-relaxed max-w-sm">
             Save, borrow, and manage your cooperative membership — all in one place.
           </p>
           <div className="grid grid-cols-1 gap-4 pt-4">
@@ -50,13 +56,13 @@ function LoginPage() {
           </div>
         </div>
 
-        <p className="relative z-10 text-xs text-white/30">© 2026 Run Staff Cooperative Multipurpose Society Limited</p>
+        <p className="relative z-10 text-xs text-white/70">© 2026 Run Staff Cooperative Multipurpose Society Limited</p>
       </div>
 
       <div className="flex-1 flex flex-col justify-center items-center px-6 sm:px-12 bg-background">
         <div className="w-full max-w-md space-y-8">
           <div className="lg:hidden flex items-center gap-3 mb-4">
-            <img src={rucsLogo} alt="RUNSMSL Logo" className="w-10 h-10 object-contain" />
+            <img src={rucsLogo} alt="RUNSMSL — Run Staff Cooperative Multipurpose Society Limited" className="w-10 h-10 object-contain" />
             <span className="font-heading font-bold text-lg text-foreground">RUNSMSL Platform</span>
           </div>
 

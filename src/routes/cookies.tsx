@@ -10,6 +10,10 @@ export const Route = createFileRoute("/cookies")({
       { name: "description", content: "How RUNSMSL uses cookies and similar technologies on our website, and how you can control them." },
       { property: "og:title", content: "Cookie Policy — RUNSMSL" },
       { property: "og:description", content: "Understand the cookies we use and manage your preferences." },
+      { property: "og:url", content: "https://runsmsl.lovable.app/cookies" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://runsmsl.lovable.app/cookies" },
     ],
   }),
   component: CookiesPage,

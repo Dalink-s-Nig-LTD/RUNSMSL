@@ -24,6 +24,11 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Join 2,500+ Redeemer's University staff saving, investing, and accessing affordable loans through RUNSMSL — a trusted cooperative since 2010." },
       { property: "og:title", content: "RUNSMSL — Building Wealth Together at Redeemer's University" },
       { property: "og:description", content: "Save, borrow, and grow with the Run Staff Cooperative Multipurpose Society Limited." },
+      { property: "og:url", content: "https://runsmsl.lovable.app/" },
+      { property: "og:type", content: "website" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://runsmsl.lovable.app/" },
     ],
   }),
   component: LandingPage,
@@ -495,7 +500,7 @@ function LandingPage() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
             <div>
               <div className="flex items-center gap-2 mb-3">
-                <img src={rucsLogo} alt="RUNSMSL" className="h-8 w-8 object-contain" />
+                <img src={rucsLogo} alt="RUNSMSL — Run Staff Cooperative Multipurpose Society Limited" className="h-8 w-8 object-contain" />
                 <span className="font-heading font-bold text-primary-foreground">RUNSMSL</span>
               </div>
               <p className="text-xs text-primary-foreground/60 leading-relaxed">
@@ -503,7 +508,7 @@ function LandingPage() {
               </p>
             </div>
             <div>
-              <h4 className="font-heading font-semibold text-primary-foreground mb-3 text-sm">Quick Links</h4>
+              <h3 className="font-heading font-semibold text-primary-foreground mb-3 text-sm">Quick Links</h3>
               <div className="space-y-1.5 text-xs text-primary-foreground/60">
                 <a href="#about" className="block hover:text-primary-foreground transition-colors">About Us</a>
                 <a href="#services" className="block hover:text-primary-foreground transition-colors">Services</a>
@@ -512,7 +517,7 @@ function LandingPage() {
               </div>
             </div>
             <div>
-              <h4 className="font-heading font-semibold text-primary-foreground mb-3 text-sm">Services</h4>
+              <h3 className="font-heading font-semibold text-primary-foreground mb-3 text-sm">Services</h3>
               <div className="space-y-1.5 text-xs text-primary-foreground/60">
                 <p>Emergency Loans</p>
                 <p>Education Loans</p>
@@ -521,7 +526,7 @@ function LandingPage() {
               </div>
             </div>
             <div>
-              <h4 className="font-heading font-semibold text-primary-foreground mb-3 text-sm">Contact</h4>
+              <h3 className="font-heading font-semibold text-primary-foreground mb-3 text-sm">Contact</h3>
               <div className="space-y-1.5 text-xs text-primary-foreground/60">
                 <p>Redeemer's University, Ede, Osun State</p>
                 <p>cooperative@run.edu.ng</p>

@@ -1,0 +1,10 @@
+# RUNSMSL — Run Staff Cooperative Multipurpose Society Limited
+
+> A registered cooperative society serving the staff of Redeemer's University, Ede, Osun State, Nigeria. Members save together, access affordable loans, and build long-term wealth through shared dividends.
+
+## Pages
+
+- [Home](/): Overview of RUNSMSL — mission, benefits, services, executives, news and contact.
+- [Sign In](/login): Member sign-in with @run.edu.ng institutional Google account.
+- [Privacy Policy](/privacy): How we collect, use and protect member personal data under the NDPA 2023.
+- [Cookie Policy](/cookies): Cookies used on the site and how members can manage preferences.

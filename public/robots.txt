@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /officer
+Disallow: /member
+Disallow: /pending-approval
+
+Sitemap: https://runsmsl.lovable.app/sitemap.xml

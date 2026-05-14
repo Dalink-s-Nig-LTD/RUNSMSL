@@ -7,9 +7,13 @@ export const Route = createFileRoute("/privacy")({
   head: () => ({
     meta: [
       { title: "Privacy Policy — RUNSMSL" },
-      { name: "description", content: "How RUNSMSL — the Run Staff Cooperative Multipurpose Society Limited — collects, uses, stores and protects your personal data, in line with the Nigeria Data Protection Act (NDPA) 2023." },
+      { name: "description", content: "How RUNSMSL collects, uses and protects member personal data, in line with the Nigeria Data Protection Act (NDPA) 2023." },
       { property: "og:title", content: "Privacy Policy — RUNSMSL" },
       { property: "og:description", content: "Our commitment to protecting members' personal data and privacy." },
+      { property: "og:url", content: "https://runsmsl.lovable.app/privacy" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://runsmsl.lovable.app/privacy" },
     ],
   }),
   component: PrivacyPage,
@@ -49,7 +53,7 @@ function PrivacyPage() {
             ].map((p) => (
               <div key={p.title} className="rounded-xl border border-border bg-card p-5">
                 <p.icon className="h-6 w-6 text-primary mb-2" />
-                <h3 className="font-heading font-semibold text-foreground mb-1">{p.title}</h3>
+                <h2 className="font-heading font-semibold text-foreground mb-1">{p.title}</h2>
                 <p className="text-sm text-muted-foreground">{p.body}</p>
               </div>
             ))}

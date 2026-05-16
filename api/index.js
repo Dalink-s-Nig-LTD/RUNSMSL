@@ -1,12 +1,5 @@
 // Minimal Vercel serverless SSR proxy for Vite/TanStack Start (ESM)
-import fs from 'fs';
-import path from 'path';
-import { pathToFileURL } from 'url';
-
-async function tryImport(entryPath) {
-  const url = pathToFileURL(entryPath).href;
-  return import(url);
-}
+import serverEntry from './_server/index.js';
 
 function toRequest(req) {
   const host = req.headers.host || 'localhost';
@@ -47,22 +40,7 @@ async function writeResponse(nodeRes, response) {
 
 export default async function handler(req, res) {
   try {
-    const cwd = process.cwd();
-    const localEntry = path.join(cwd, 'api', '_server', 'index.js');
-    const distEntry = path.join(cwd, 'dist', 'server', 'index.js');
-
-    let mod = null;
-    if (fs.existsSync(localEntry)) {
-      mod = await tryImport(localEntry);
-    } else if (fs.existsSync(distEntry)) {
-      mod = await tryImport(distEntry);
-    } else {
-      res.statusCode = 500;
-      res.end('Server build not found');
-      return;
-    }
-
-    const entry = mod.default || mod;
+    const entry = serverEntry.default || serverEntry;
     const fetchHandler = entry?.fetch || entry?.default?.fetch;
     if (typeof fetchHandler !== 'function') {
       res.statusCode = 500;

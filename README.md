@@ -137,11 +137,11 @@ runlms/
 
 ### Installation
 
-1. **Clone the repository** (already done in your case)
+1. **Clone the repository** 
    ```bash
    git init
    git branch -m main
-   git pull 001 main
+   git pull origin main
    ```
 
 2. **Install dependencies**

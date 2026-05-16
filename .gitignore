@@ -30,3 +30,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local debug snapshots/templates
+index_live.html
+index.html.server

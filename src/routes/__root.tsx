@@ -1,4 +1,4 @@
-import { Outlet, Link, createRootRoute } from "@tanstack/react-router";
+import { HeadContent, Outlet, Scripts, Link, createRootRoute } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
 import { CookieConsent } from "@/components/CookieConsent";
@@ -53,9 +53,15 @@ export const Route = createRootRoute({
 
 function RootComponent() {
   return (
-    <>
-      <Outlet />
-      <CookieConsent />
-    </>
+    <html lang="en">
+      <head>
+        <HeadContent />
+      </head>
+      <body>
+        <Outlet />
+        <CookieConsent />
+        <Scripts />
+      </body>
+    </html>
   );
 }

@@ -1,7 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
-import handler from '../api/index.js';
+import { fileURLToPath, pathToFileURL } from 'url';
 
 async function copyDir(src, dest) {
   if (!fs.existsSync(src)) {
@@ -35,6 +34,9 @@ async function main() {
   try {
     await copyDir(src, dest);
     console.log('Copied server build to', dest);
+
+    const handlerModule = await import(pathToFileURL(path.join(rootDir, 'api', 'index.js')).href);
+    const handler = handlerModule.default || handlerModule;
 
     const req = { method: 'GET', url: '/', headers: { host: 'localhost', 'x-forwarded-proto': 'https' } };
     const res = {

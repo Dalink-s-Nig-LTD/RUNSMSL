@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>RUNSMSL</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+    <link rel="preload" as="image" href="/src/assets/rucs-logo.png" />
+    <link rel="preload" as="image" href="/src/assets/hero-team.jpg" />
+  </head>
+  <body>
+    <!--$-->
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

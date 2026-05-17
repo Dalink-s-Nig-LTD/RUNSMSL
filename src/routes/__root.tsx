@@ -1,7 +1,9 @@
 import { HeadContent, Outlet, Scripts, Link, createRootRoute } from "@tanstack/react-router";
+import { ConvexAuthProvider } from "@convex-dev/auth/react";
 
 import appCss from "../styles.css?url";
 import { CookieConsent } from "@/components/CookieConsent";
+import { convexClient } from "@/lib/convex";
 
 function NotFoundComponent() {
   return (
@@ -52,15 +54,21 @@ export const Route = createRootRoute({
 });
 
 function RootComponent() {
+  const content = (
+    <>
+      <Outlet />
+      <CookieConsent />
+      <Scripts />
+    </>
+  );
+
   return (
     <html lang="en">
       <head>
         <HeadContent />
       </head>
       <body>
-        <Outlet />
-        <CookieConsent />
-        <Scripts />
+        {convexClient ? <ConvexAuthProvider client={convexClient}>{content}</ConvexAuthProvider> : content}
       </body>
     </html>
   );

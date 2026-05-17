@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as SigninRouteImport } from './routes/signin'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PendingApprovalRouteImport } from './routes/pending-approval'
 import { Route as OfficerRouteImport } from './routes/officer'
@@ -18,24 +19,19 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as CookiesRouteImport } from './routes/cookies'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as OfficerIndexRouteImport } from './routes/officer.index'
-import { Route as MemberIndexRouteImport } from './routes/member.index'
-import { Route as AdminIndexRouteImport } from './routes/admin.index'
-import { Route as MemberApplyLoanRouteImport } from './routes/member.apply-loan'
 import { Route as AdminProductsRouteImport } from './routes/admin.products'
-import { Route as AdminMembersRouteImport } from './routes/admin.members'
 import { Route as AdminLoansRouteImport } from './routes/admin.loans'
 import { Route as AdminBroadcastRouteImport } from './routes/admin.broadcast'
 import { Route as AdminAuditRouteImport } from './routes/admin.audit'
-import { Route as AdminApplicationsRouteImport } from './routes/admin.applications'
-import { Route as MemberShopIndexRouteImport } from './routes/member.shop.index'
-import { Route as MemberLoansIndexRouteImport } from './routes/member.loans.index'
-import { Route as MemberShopIdRouteImport } from './routes/member.shop.$id'
-import { Route as MemberLoansIdRouteImport } from './routes/member.loans.$id'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SigninRoute = SigninRouteImport.update({
+  id: '/signin',
+  path: '/signin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivacyRoute = PrivacyRouteImport.update({
@@ -78,34 +74,9 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const OfficerIndexRoute = OfficerIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => OfficerRoute,
-} as any)
-const MemberIndexRoute = MemberIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => MemberRoute,
-} as any)
-const AdminIndexRoute = AdminIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AdminRoute,
-} as any)
-const MemberApplyLoanRoute = MemberApplyLoanRouteImport.update({
-  id: '/apply-loan',
-  path: '/apply-loan',
-  getParentRoute: () => MemberRoute,
-} as any)
 const AdminProductsRoute = AdminProductsRouteImport.update({
   id: '/products',
   path: '/products',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminMembersRoute = AdminMembersRouteImport.update({
-  id: '/members',
-  path: '/members',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminLoansRoute = AdminLoansRouteImport.update({
@@ -123,78 +94,38 @@ const AdminAuditRoute = AdminAuditRouteImport.update({
   path: '/audit',
   getParentRoute: () => AdminRoute,
 } as any)
-const AdminApplicationsRoute = AdminApplicationsRouteImport.update({
-  id: '/applications',
-  path: '/applications',
-  getParentRoute: () => AdminRoute,
-} as any)
-const MemberShopIndexRoute = MemberShopIndexRouteImport.update({
-  id: '/shop/',
-  path: '/shop/',
-  getParentRoute: () => MemberRoute,
-} as any)
-const MemberLoansIndexRoute = MemberLoansIndexRouteImport.update({
-  id: '/loans/',
-  path: '/loans/',
-  getParentRoute: () => MemberRoute,
-} as any)
-const MemberShopIdRoute = MemberShopIdRouteImport.update({
-  id: '/shop/$id',
-  path: '/shop/$id',
-  getParentRoute: () => MemberRoute,
-} as any)
-const MemberLoansIdRoute = MemberLoansIdRouteImport.update({
-  id: '/loans/$id',
-  path: '/loans/$id',
-  getParentRoute: () => MemberRoute,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/cookies': typeof CookiesRoute
   '/login': typeof LoginRoute
-  '/member': typeof MemberRouteWithChildren
-  '/officer': typeof OfficerRouteWithChildren
+  '/member': typeof MemberRoute
+  '/officer': typeof OfficerRoute
   '/pending-approval': typeof PendingApprovalRoute
   '/privacy': typeof PrivacyRoute
+  '/signin': typeof SigninRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/admin/applications': typeof AdminApplicationsRoute
   '/admin/audit': typeof AdminAuditRoute
   '/admin/broadcast': typeof AdminBroadcastRoute
   '/admin/loans': typeof AdminLoansRoute
-  '/admin/members': typeof AdminMembersRoute
   '/admin/products': typeof AdminProductsRoute
-  '/member/apply-loan': typeof MemberApplyLoanRoute
-  '/admin/': typeof AdminIndexRoute
-  '/member/': typeof MemberIndexRoute
-  '/officer/': typeof OfficerIndexRoute
-  '/member/loans/$id': typeof MemberLoansIdRoute
-  '/member/shop/$id': typeof MemberShopIdRoute
-  '/member/loans/': typeof MemberLoansIndexRoute
-  '/member/shop/': typeof MemberShopIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
   '/cookies': typeof CookiesRoute
   '/login': typeof LoginRoute
+  '/member': typeof MemberRoute
+  '/officer': typeof OfficerRoute
   '/pending-approval': typeof PendingApprovalRoute
   '/privacy': typeof PrivacyRoute
+  '/signin': typeof SigninRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/admin/applications': typeof AdminApplicationsRoute
   '/admin/audit': typeof AdminAuditRoute
   '/admin/broadcast': typeof AdminBroadcastRoute
   '/admin/loans': typeof AdminLoansRoute
-  '/admin/members': typeof AdminMembersRoute
   '/admin/products': typeof AdminProductsRoute
-  '/member/apply-loan': typeof MemberApplyLoanRoute
-  '/admin': typeof AdminIndexRoute
-  '/member': typeof MemberIndexRoute
-  '/officer': typeof OfficerIndexRoute
-  '/member/loans/$id': typeof MemberLoansIdRoute
-  '/member/shop/$id': typeof MemberShopIdRoute
-  '/member/loans': typeof MemberLoansIndexRoute
-  '/member/shop': typeof MemberShopIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -202,25 +133,16 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteWithChildren
   '/cookies': typeof CookiesRoute
   '/login': typeof LoginRoute
-  '/member': typeof MemberRouteWithChildren
-  '/officer': typeof OfficerRouteWithChildren
+  '/member': typeof MemberRoute
+  '/officer': typeof OfficerRoute
   '/pending-approval': typeof PendingApprovalRoute
   '/privacy': typeof PrivacyRoute
+  '/signin': typeof SigninRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/admin/applications': typeof AdminApplicationsRoute
   '/admin/audit': typeof AdminAuditRoute
   '/admin/broadcast': typeof AdminBroadcastRoute
   '/admin/loans': typeof AdminLoansRoute
-  '/admin/members': typeof AdminMembersRoute
   '/admin/products': typeof AdminProductsRoute
-  '/member/apply-loan': typeof MemberApplyLoanRoute
-  '/admin/': typeof AdminIndexRoute
-  '/member/': typeof MemberIndexRoute
-  '/officer/': typeof OfficerIndexRoute
-  '/member/loans/$id': typeof MemberLoansIdRoute
-  '/member/shop/$id': typeof MemberShopIdRoute
-  '/member/loans/': typeof MemberLoansIndexRoute
-  '/member/shop/': typeof MemberShopIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -233,43 +155,28 @@ export interface FileRouteTypes {
     | '/officer'
     | '/pending-approval'
     | '/privacy'
+    | '/signin'
     | '/sitemap.xml'
-    | '/admin/applications'
     | '/admin/audit'
     | '/admin/broadcast'
     | '/admin/loans'
-    | '/admin/members'
     | '/admin/products'
-    | '/member/apply-loan'
-    | '/admin/'
-    | '/member/'
-    | '/officer/'
-    | '/member/loans/$id'
-    | '/member/shop/$id'
-    | '/member/loans/'
-    | '/member/shop/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin'
     | '/cookies'
     | '/login'
+    | '/member'
+    | '/officer'
     | '/pending-approval'
     | '/privacy'
+    | '/signin'
     | '/sitemap.xml'
-    | '/admin/applications'
     | '/admin/audit'
     | '/admin/broadcast'
     | '/admin/loans'
-    | '/admin/members'
     | '/admin/products'
-    | '/member/apply-loan'
-    | '/admin'
-    | '/member'
-    | '/officer'
-    | '/member/loans/$id'
-    | '/member/shop/$id'
-    | '/member/loans'
-    | '/member/shop'
   id:
     | '__root__'
     | '/'
@@ -280,21 +187,12 @@ export interface FileRouteTypes {
     | '/officer'
     | '/pending-approval'
     | '/privacy'
+    | '/signin'
     | '/sitemap.xml'
-    | '/admin/applications'
     | '/admin/audit'
     | '/admin/broadcast'
     | '/admin/loans'
-    | '/admin/members'
     | '/admin/products'
-    | '/member/apply-loan'
-    | '/admin/'
-    | '/member/'
-    | '/officer/'
-    | '/member/loans/$id'
-    | '/member/shop/$id'
-    | '/member/loans/'
-    | '/member/shop/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -302,10 +200,11 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRouteWithChildren
   CookiesRoute: typeof CookiesRoute
   LoginRoute: typeof LoginRoute
-  MemberRoute: typeof MemberRouteWithChildren
-  OfficerRoute: typeof OfficerRouteWithChildren
+  MemberRoute: typeof MemberRoute
+  OfficerRoute: typeof OfficerRoute
   PendingApprovalRoute: typeof PendingApprovalRoute
   PrivacyRoute: typeof PrivacyRoute
+  SigninRoute: typeof SigninRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
 }
 
@@ -316,6 +215,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signin': {
+      id: '/signin'
+      path: '/signin'
+      fullPath: '/signin'
+      preLoaderRoute: typeof SigninRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/privacy': {
@@ -374,46 +280,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/officer/': {
-      id: '/officer/'
-      path: '/'
-      fullPath: '/officer/'
-      preLoaderRoute: typeof OfficerIndexRouteImport
-      parentRoute: typeof OfficerRoute
-    }
-    '/member/': {
-      id: '/member/'
-      path: '/'
-      fullPath: '/member/'
-      preLoaderRoute: typeof MemberIndexRouteImport
-      parentRoute: typeof MemberRoute
-    }
-    '/admin/': {
-      id: '/admin/'
-      path: '/'
-      fullPath: '/admin/'
-      preLoaderRoute: typeof AdminIndexRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/member/apply-loan': {
-      id: '/member/apply-loan'
-      path: '/apply-loan'
-      fullPath: '/member/apply-loan'
-      preLoaderRoute: typeof MemberApplyLoanRouteImport
-      parentRoute: typeof MemberRoute
-    }
     '/admin/products': {
       id: '/admin/products'
       path: '/products'
       fullPath: '/admin/products'
       preLoaderRoute: typeof AdminProductsRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/members': {
-      id: '/admin/members'
-      path: '/members'
-      fullPath: '/admin/members'
-      preLoaderRoute: typeof AdminMembersRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/loans': {
@@ -437,107 +308,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAuditRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/admin/applications': {
-      id: '/admin/applications'
-      path: '/applications'
-      fullPath: '/admin/applications'
-      preLoaderRoute: typeof AdminApplicationsRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/member/shop/': {
-      id: '/member/shop/'
-      path: '/shop'
-      fullPath: '/member/shop/'
-      preLoaderRoute: typeof MemberShopIndexRouteImport
-      parentRoute: typeof MemberRoute
-    }
-    '/member/loans/': {
-      id: '/member/loans/'
-      path: '/loans'
-      fullPath: '/member/loans/'
-      preLoaderRoute: typeof MemberLoansIndexRouteImport
-      parentRoute: typeof MemberRoute
-    }
-    '/member/shop/$id': {
-      id: '/member/shop/$id'
-      path: '/shop/$id'
-      fullPath: '/member/shop/$id'
-      preLoaderRoute: typeof MemberShopIdRouteImport
-      parentRoute: typeof MemberRoute
-    }
-    '/member/loans/$id': {
-      id: '/member/loans/$id'
-      path: '/loans/$id'
-      fullPath: '/member/loans/$id'
-      preLoaderRoute: typeof MemberLoansIdRouteImport
-      parentRoute: typeof MemberRoute
-    }
   }
 }
 
 interface AdminRouteChildren {
-  AdminApplicationsRoute: typeof AdminApplicationsRoute
   AdminAuditRoute: typeof AdminAuditRoute
   AdminBroadcastRoute: typeof AdminBroadcastRoute
   AdminLoansRoute: typeof AdminLoansRoute
-  AdminMembersRoute: typeof AdminMembersRoute
   AdminProductsRoute: typeof AdminProductsRoute
-  AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
-  AdminApplicationsRoute: AdminApplicationsRoute,
   AdminAuditRoute: AdminAuditRoute,
   AdminBroadcastRoute: AdminBroadcastRoute,
   AdminLoansRoute: AdminLoansRoute,
-  AdminMembersRoute: AdminMembersRoute,
   AdminProductsRoute: AdminProductsRoute,
-  AdminIndexRoute: AdminIndexRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
-
-interface MemberRouteChildren {
-  MemberApplyLoanRoute: typeof MemberApplyLoanRoute
-  MemberIndexRoute: typeof MemberIndexRoute
-  MemberLoansIdRoute: typeof MemberLoansIdRoute
-  MemberShopIdRoute: typeof MemberShopIdRoute
-  MemberLoansIndexRoute: typeof MemberLoansIndexRoute
-  MemberShopIndexRoute: typeof MemberShopIndexRoute
-}
-
-const MemberRouteChildren: MemberRouteChildren = {
-  MemberApplyLoanRoute: MemberApplyLoanRoute,
-  MemberIndexRoute: MemberIndexRoute,
-  MemberLoansIdRoute: MemberLoansIdRoute,
-  MemberShopIdRoute: MemberShopIdRoute,
-  MemberLoansIndexRoute: MemberLoansIndexRoute,
-  MemberShopIndexRoute: MemberShopIndexRoute,
-}
-
-const MemberRouteWithChildren =
-  MemberRoute._addFileChildren(MemberRouteChildren)
-
-interface OfficerRouteChildren {
-  OfficerIndexRoute: typeof OfficerIndexRoute
-}
-
-const OfficerRouteChildren: OfficerRouteChildren = {
-  OfficerIndexRoute: OfficerIndexRoute,
-}
-
-const OfficerRouteWithChildren =
-  OfficerRoute._addFileChildren(OfficerRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   CookiesRoute: CookiesRoute,
   LoginRoute: LoginRoute,
-  MemberRoute: MemberRouteWithChildren,
-  OfficerRoute: OfficerRouteWithChildren,
+  MemberRoute: MemberRoute,
+  OfficerRoute: OfficerRoute,
   PendingApprovalRoute: PendingApprovalRoute,
   PrivacyRoute: PrivacyRoute,
+  SigninRoute: SigninRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
 }
 export const routeTree = rootRouteImport

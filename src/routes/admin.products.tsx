@@ -1,163 +1,237 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
-import { products as initialProducts, formatCurrency } from "@/data/mockData";
-import { Search, Plus, Edit, Trash2, ImageIcon, X, Check } from "lucide-react";
+import { useMutation, useQuery } from "convex/react";
+import { api } from "../../convex/_generated/api";
+import { Box, CheckCircle, Pencil, PlusCircle, Trash2 } from "lucide-react";
+import { FormEvent, useMemo, useState } from "react";
+
+import { formatCurrency } from "@/data/mockData";
 
 export const Route = createFileRoute("/admin/products")({ component: AdminProducts });
 
-type Product = (typeof initialProducts)[number] & { description?: string };
+type ProductForm = {
+  name: string;
+  description: string;
+  category: string;
+  price: string;
+  stock_quantity: string;
+  is_active: boolean;
+  image_url: string;
+};
+
+const emptyForm: ProductForm = {
+  name: "",
+  description: "",
+  category: "",
+  price: "",
+  stock_quantity: "",
+  is_active: true,
+  image_url: "",
+};
 
 function AdminProducts() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [productList, setProductList] = useState<Product[]>(initialProducts as Product[]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-  const [form, setForm] = useState({ name: "", category: "Electronics", price: 0, stock_quantity: 0, description: "", image_url: "" });
+  const products = useQuery(api.products.list) ?? [];
+  const createProduct = useMutation(api.products.create);
+  const updateProduct = useMutation(api.products.update);
+  const deleteProduct = useMutation(api.products.remove);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [form, setForm] = useState<ProductForm>(emptyForm);
+  const [busyId, setBusyId] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const filteredProducts = productList.filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase()));
+  const editingProduct = useMemo(
+    () => products.find((product) => product.externalId === editingId) ?? null,
+    [editingId, products],
+  );
 
-  const handleOpenModal = (product?: Product) => {
-    if (product) {
-      setEditingProduct(product);
-      setForm({ name: product.name, category: product.category, price: product.price, stock_quantity: product.stock_quantity, description: product.description || "", image_url: product.image_url || "" });
-    } else {
-      setEditingProduct(null);
-      setForm({ name: "", category: "Electronics", price: 0, stock_quantity: 0, description: "", image_url: "" });
+  const resetForm = () => {
+    setEditingId(null);
+    setForm(emptyForm);
+    setError(null);
+  };
+
+  const beginEdit = (product: (typeof products)[number]) => {
+    setEditingId(product.externalId);
+    setForm({
+      name: product.name,
+      description: product.description,
+      category: product.category,
+      price: String(product.price),
+      stock_quantity: String(product.stock_quantity),
+      is_active: product.is_active,
+      image_url: product.image_url,
+    });
+    setError(null);
+  };
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setError(null);
+
+    const payload = {
+      name: form.name.trim(),
+      description: form.description.trim(),
+      category: form.category.trim(),
+      price: Number(form.price),
+      stock_quantity: Number(form.stock_quantity),
+      is_active: form.is_active,
+      image_url: form.image_url.trim(),
+    };
+
+    if (!payload.name || !payload.category || !payload.description || !payload.image_url || Number.isNaN(payload.price) || Number.isNaN(payload.stock_quantity)) {
+      setError("Fill in all product fields with valid values.");
+      return;
     }
-    setIsModalOpen(true);
+
+    setBusyId(editingId ?? "create");
+    try {
+      if (editingId) {
+        await updateProduct({ externalId: editingId, ...payload });
+      } else {
+        await createProduct(payload);
+      }
+      resetForm();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Unable to save product");
+    } finally {
+      setBusyId(null);
+    }
   };
 
-  const handleSave = () => {
-    if (!form.name || form.price <= 0) return;
-    if (editingProduct) setProductList(productList.map(p => p.id === editingProduct.id ? { ...p, ...form } : p));
-    else setProductList([...productList, { id: `p${Date.now()}`, ...form, is_active: true } as Product]);
-    setIsModalOpen(false);
+  const handleDelete = async (externalId: string) => {
+    if (!confirm("Delete this product?")) {
+      return;
+    }
+    setBusyId(externalId);
+    setError(null);
+    try {
+      await deleteProduct({ externalId });
+      if (editingId === externalId) {
+        resetForm();
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Unable to delete product");
+    } finally {
+      setBusyId(null);
+    }
   };
-
-  const handleDelete = (id: string) => { if (window.confirm("Are you sure?")) setProductList(productList.filter(p => p.id !== id)); };
 
   return (
-    <div className="space-y-6 relative">
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-foreground/40 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4">
-          <div className="bg-card rounded-xl w-full max-w-lg border border-border shadow-xl overflow-hidden">
-            <div className="px-5 py-4 border-b border-border flex justify-between items-center bg-secondary/50">
-              <h3 className="font-heading font-bold text-foreground text-sm">{editingProduct ? "Edit Product" : "Add New Product"}</h3>
-              <button onClick={() => setIsModalOpen(false)} className="text-muted-foreground hover:text-foreground"><X className="w-4 h-4" /></button>
-            </div>
-            <div className="p-5 space-y-3.5 max-h-[70vh] overflow-y-auto">
-              <div><label className="block text-xs font-medium text-muted-foreground mb-1">Product Name</label><input type="text" className="w-full px-3 py-2 bg-card border border-border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder='e.g. HP Laptop 15.6"' /></div>
-              <div className="grid grid-cols-2 gap-3">
-                <div><label className="block text-xs font-medium text-muted-foreground mb-1">Category</label><select className="w-full px-3 py-2 bg-card border border-border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" value={form.category} onChange={e => setForm({ ...form, category: e.target.value })}><option value="Electronics">Electronics</option><option value="Household">Household</option><option value="Groceries">Groceries</option></select></div>
-                <div><label className="block text-xs font-medium text-muted-foreground mb-1">Price (₦)</label><input type="number" className="w-full px-3 py-2 bg-card border border-border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" value={form.price || ""} onChange={e => setForm({ ...form, price: Number(e.target.value) })} /></div>
-              </div>
-              <div><label className="block text-xs font-medium text-muted-foreground mb-1">Stock Quantity</label><input type="number" className="w-full px-3 py-2 bg-card border border-border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" value={form.stock_quantity || ""} onChange={e => setForm({ ...form, stock_quantity: Number(e.target.value) })} /></div>
-              <div><label className="block text-xs font-medium text-muted-foreground mb-1">Description</label><textarea className="w-full px-3 py-2 bg-card border border-border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none h-20" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} /></div>
-              <div><label className="block text-xs font-medium text-muted-foreground mb-1">Image URL</label><input type="text" className="w-full px-3 py-2 bg-card border border-border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" value={form.image_url} onChange={e => setForm({ ...form, image_url: e.target.value })} placeholder="https://..." /></div>
-            </div>
-            <div className="px-5 py-3 bg-secondary/50 border-t border-border flex justify-end gap-2">
-              <button onClick={() => setIsModalOpen(false)} className="px-3.5 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary rounded-md transition-colors">Cancel</button>
-              <button onClick={handleSave} disabled={!form.name || form.price <= 0} className="px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-md flex items-center gap-1.5 hover:opacity-90 transition-all disabled:opacity-40"><Check className="w-3.5 h-3.5" />{editingProduct ? "Save" : "Add Product"}</button>
-            </div>
-          </div>
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-xl sm:text-2xl font-heading font-bold text-foreground">Products</h1>
+        <p className="text-muted-foreground text-sm mt-1">Create, update, and remove shop products in Convex.</p>
+      </div>
+
+      {error && (
+        <div className="rounded-lg border border-destructive/20 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+          {error}
         </div>
       )}
 
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <h1 className="text-xl sm:text-2xl font-heading font-bold text-foreground">Products</h1>
-          <p className="text-muted-foreground text-sm mt-1">Manage the cooperative shop catalogue.</p>
-        </div>
-        <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
-          <div className="relative flex-1 min-w-[140px] sm:w-64">
-            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-            <input type="text" placeholder="Search products..." className="w-full pl-9 pr-4 py-2 bg-card border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all" value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
+      <form onSubmit={handleSubmit} className="bg-card rounded-xl border border-border p-4 sm:p-6 space-y-4">
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <h2 className="font-heading font-semibold text-foreground">{editingId ? "Edit product" : "Add product"}</h2>
+            <p className="text-xs text-muted-foreground">{editingId ? `Editing ${editingProduct?.name ?? "selected product"}` : "Create a new catalog item."}</p>
           </div>
-          <button onClick={() => handleOpenModal()} className="flex items-center px-3 sm:px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:opacity-90 transition-all shrink-0">
-            <Plus className="w-4 h-4 mr-1" /><span className="hidden sm:inline">Add Product</span><span className="sm:hidden">Add</span>
-          </button>
+          {editingId && (
+            <button type="button" onClick={resetForm} className="text-xs font-medium text-muted-foreground hover:text-foreground">
+              Cancel edit
+            </button>
+          )}
         </div>
-      </div>
 
-      <div className="space-y-3 md:hidden">
-        {filteredProducts.map(product => (
-          <div key={product.id} className="bg-card rounded-xl border border-border p-4">
-            <div className="flex items-start gap-3 mb-3">
-              <div className="w-12 h-12 rounded-lg bg-secondary overflow-hidden shrink-0 flex items-center justify-center border border-border">
-                {product.image_url ? <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" /> : <ImageIcon className="w-5 h-5 text-muted-foreground" />}
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-foreground truncate">{product.name}</p>
-                <p className="text-[10px] text-muted-foreground line-clamp-1">{product.description}</p>
-              </div>
-            </div>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <span className="text-sm font-heading font-bold text-foreground">{formatCurrency(product.price)}</span>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-secondary text-muted-foreground border border-border">{product.category}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="flex items-center gap-1">
-                  <span className={`w-1.5 h-1.5 rounded-full ${product.stock_quantity > 5 ? "bg-success" : product.stock_quantity > 0 ? "bg-warning" : "bg-destructive"}`} />
-                  <span className="text-xs font-semibold text-foreground">{product.stock_quantity}</span>
+        <div className="grid gap-4 md:grid-cols-2">
+          <label className="space-y-1 text-sm">
+            <span className="text-muted-foreground">Name</span>
+            <input className="w-full rounded-lg border border-border bg-background px-3 py-2" value={form.name} onChange={(e) => setForm((current) => ({ ...current, name: e.target.value }))} />
+          </label>
+          <label className="space-y-1 text-sm">
+            <span className="text-muted-foreground">Category</span>
+            <input className="w-full rounded-lg border border-border bg-background px-3 py-2" value={form.category} onChange={(e) => setForm((current) => ({ ...current, category: e.target.value }))} />
+          </label>
+          <label className="space-y-1 text-sm">
+            <span className="text-muted-foreground">Price</span>
+            <input type="number" step="0.01" className="w-full rounded-lg border border-border bg-background px-3 py-2" value={form.price} onChange={(e) => setForm((current) => ({ ...current, price: e.target.value }))} />
+          </label>
+          <label className="space-y-1 text-sm">
+            <span className="text-muted-foreground">Stock quantity</span>
+            <input type="number" className="w-full rounded-lg border border-border bg-background px-3 py-2" value={form.stock_quantity} onChange={(e) => setForm((current) => ({ ...current, stock_quantity: e.target.value }))} />
+          </label>
+          <label className="space-y-1 text-sm md:col-span-2">
+            <span className="text-muted-foreground">Description</span>
+            <textarea className="w-full rounded-lg border border-border bg-background px-3 py-2 min-h-24" value={form.description} onChange={(e) => setForm((current) => ({ ...current, description: e.target.value }))} />
+          </label>
+          <label className="space-y-1 text-sm md:col-span-2">
+            <span className="text-muted-foreground">Image URL</span>
+            <input className="w-full rounded-lg border border-border bg-background px-3 py-2" value={form.image_url} onChange={(e) => setForm((current) => ({ ...current, image_url: e.target.value }))} />
+          </label>
+        </div>
+
+        <label className="inline-flex items-center gap-2 text-sm text-muted-foreground">
+          <input type="checkbox" checked={form.is_active} onChange={(e) => setForm((current) => ({ ...current, is_active: e.target.checked }))} />
+          Active in storefront
+        </label>
+
+        <button
+          type="submit"
+          disabled={busyId !== null}
+          className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground hover:opacity-90 disabled:opacity-50"
+        >
+          {editingId ? <Pencil className="w-4 h-4" /> : <PlusCircle className="w-4 h-4" />}
+          {editingId ? "Save changes" : "Create product"}
+        </button>
+      </form>
+
+      <div className="bg-card rounded-xl border border-border overflow-hidden">
+        <div className="px-4 sm:px-6 py-4 border-b border-border flex items-center justify-between gap-3">
+          <div>
+            <h2 className="font-heading font-semibold text-foreground">Catalog</h2>
+            <p className="text-xs text-muted-foreground">Showing {products.length} products.</p>
+          </div>
+          <div className="text-xs text-muted-foreground">Newest first</div>
+        </div>
+
+        {products.length === 0 ? (
+          <div className="p-8 text-sm text-muted-foreground">No products yet.</div>
+        ) : (
+          <div className="divide-y divide-border">
+            {products.map((product) => (
+              <div key={product.externalId} className="p-4 sm:p-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                <div className="min-w-0 flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-lg bg-secondary overflow-hidden flex items-center justify-center shrink-0">
+                    {product.image_url ? <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" /> : <Box className="w-5 h-5 text-muted-foreground" />}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="font-semibold text-foreground truncate">{product.name}</p>
+                    <p className="text-xs text-muted-foreground truncate">{product.category} · {formatCurrency(product.price)}</p>
+                    <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{product.description}</p>
+                  </div>
                 </div>
-                <button onClick={() => handleOpenModal(product)} className="p-1.5 text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-md transition-colors"><Edit className="w-4 h-4" /></button>
-                <button onClick={() => handleDelete(product.id)} className="p-1.5 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-md transition-colors"><Trash2 className="w-4 h-4" /></button>
+                <div className="flex flex-wrap items-center gap-2 shrink-0">
+                  <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase border ${product.is_active ? "bg-success/10 text-success border-success/20" : "bg-secondary text-muted-foreground border-border"}`}>
+                    {product.is_active ? "Active" : "Hidden"}
+                  </span>
+                  <span className="px-2 py-1 rounded-full text-[10px] font-bold uppercase bg-primary/10 text-primary border border-primary/20">
+                    Stock {product.stock_quantity}
+                  </span>
+                  <button onClick={() => beginEdit(product)} className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-xs font-medium text-foreground hover:bg-secondary/50">
+                    <Pencil className="w-3.5 h-3.5" /> Edit
+                  </button>
+                  <button onClick={() => void handleDelete(product.externalId)} disabled={busyId === product.externalId} className="inline-flex items-center gap-1.5 rounded-lg border border-destructive/20 px-3 py-2 text-xs font-medium text-destructive hover:bg-destructive/10 disabled:opacity-50">
+                    <Trash2 className="w-3.5 h-3.5" /> Delete
+                  </button>
+                </div>
               </div>
-            </div>
+            ))}
           </div>
-        ))}
+        )}
       </div>
 
-      <div className="bg-card rounded-xl border border-border overflow-hidden hidden md:block">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="bg-secondary/50 border-b border-border">
-                <th className="px-5 py-3 text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Product</th>
-                <th className="px-5 py-3 text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Category</th>
-                <th className="px-5 py-3 text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Price</th>
-                <th className="px-5 py-3 text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Stock</th>
-                <th className="px-5 py-3 text-right text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border">
-              {filteredProducts.map(product => (
-                <tr key={product.id} className="hover:bg-secondary/30 transition-colors">
-                  <td className="px-5 py-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-lg bg-secondary overflow-hidden shrink-0 flex items-center justify-center border border-border">
-                        {product.image_url ? <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" /> : <ImageIcon className="w-4 h-4 text-muted-foreground" />}
-                      </div>
-                      <div>
-                        <p className="text-sm font-semibold text-foreground line-clamp-1">{product.name}</p>
-                        <p className="text-[10px] text-muted-foreground line-clamp-1 max-w-xs">{product.description}</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-5 py-4"><span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-secondary text-muted-foreground border border-border">{product.category}</span></td>
-                  <td className="px-5 py-4 text-sm font-semibold text-foreground">{formatCurrency(product.price)}</td>
-                  <td className="px-5 py-4">
-                    <div className="flex items-center gap-1.5">
-                      <span className={`w-1.5 h-1.5 rounded-full ${product.stock_quantity > 5 ? "bg-success" : product.stock_quantity > 0 ? "bg-warning" : "bg-destructive"}`} />
-                      <span className={`text-sm font-semibold ${product.stock_quantity > 0 ? "text-foreground" : "text-destructive"}`}>{product.stock_quantity}</span>
-                    </div>
-                  </td>
-                  <td className="px-5 py-4 text-right">
-                    <div className="flex justify-end gap-1">
-                      <button onClick={() => handleOpenModal(product)} className="p-1.5 text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-md transition-colors"><Edit className="w-4 h-4" /></button>
-                      <button onClick={() => handleDelete(product.id)} className="p-1.5 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-md transition-colors"><Trash2 className="w-4 h-4" /></button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        {filteredProducts.length === 0 && <div className="text-center py-12 text-sm text-muted-foreground">No products found.</div>}
+      <div className="text-sm text-muted-foreground flex items-center gap-2">
+        <CheckCircle className="w-4 h-4 text-success" />
+        Product changes persist to Convex and create audit entries.
       </div>
-
-      {filteredProducts.length === 0 && <div className="text-center py-12 text-sm text-muted-foreground md:hidden">No products found.</div>}
     </div>
   );
 }

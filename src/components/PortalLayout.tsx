@@ -1,32 +1,43 @@
-import { useState, useRef, useEffect } from "react";
-import { Link, Outlet, useNavigate, useLocation } from "@tanstack/react-router";
+import { useState, useRef, useEffect, type ReactNode } from "react";
+import { Outlet, useNavigate, useLocation } from "@tanstack/react-router";
+import { useLocalAuth } from "@/hooks/useAuth";
 import {
   LayoutDashboard, ShoppingBag, CreditCard, Bell, LogOut,
   Users, Box, FileText, CheckCircle, Info, AlertCircle,
   Sun, Moon, Menu, X, ClipboardCheck, DollarSign, AlertTriangle,
   UserPlus, Megaphone,
 } from "lucide-react";
-import { mockUser, mockAdmin, mockOfficer } from "@/data/mockData";
+import { useCurrentUser } from "@/hooks/useAuth";
 import rucsLogo from "@/assets/rucs-logo.png";
-
-const NOTIFS = [
-  { id: 1, type: "success", title: "Loan Approved", message: "Your loan request for MacBook Pro has been approved.", time: "2 days ago", read: false },
-  { id: 2, type: "info", title: "Repayment Due", message: "Your monthly installment of ₦161,875 is due on May 1.", time: "1 week ago", read: false },
-  { id: 3, type: "warning", title: "Request Submitted", message: "Your loan request for LG Refrigerator is under review.", time: "2 weeks ago", read: true },
-  { id: 4, type: "success", title: "Loan Cleared", message: "You have fully repaid Sony Headphones. Total: ₦367,500.", time: "3 months ago", read: true },
-];
 
 type Role = "member" | "admin" | "officer";
 
-export const PortalLayout = ({ role }: { role: Role }) => {
+export const PortalLayout = ({ role, children }: { role: Role; children?: ReactNode }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { logoutLocal } = useLocalAuth();
   const [showNotifs, setShowNotifs] = useState(false);
-  const [notifications, setNotifications] = useState(NOTIFS);
+  const notifications: Array<{ id: number; type: "success" | "info" | "warning"; title: string; message: string; time: string; read: boolean }> = [];
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const notifRef = useRef<HTMLDivElement>(null);
-  const user = role === "member" ? mockUser : role === "officer" ? mockOfficer : mockAdmin;
+  const { user } = useCurrentUser();
+
+  useEffect(() => {
+    // If user is explicitly null (queried and unauthenticated), redirect to login
+    if (user === null) navigate({ to: "/login" });
+  }, [navigate, user]);
+
+  const resolvedRole: Role = user?.role === "admin" ? "admin" : user?.role === "loan_officer" ? "officer" : "member";
+  const activeRole = user ? resolvedRole : role;
+
+  useEffect(() => {
+    if (!user) return;
+    const expectedPath = activeRole === "member" ? "/member" : activeRole === "officer" ? "/officer" : "/admin";
+    if (!location.pathname.startsWith(expectedPath)) {
+      navigate({ to: expectedPath });
+    }
+  }, [activeRole, location.pathname, navigate, user]);
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", isDarkMode);
@@ -41,7 +52,6 @@ export const PortalLayout = ({ role }: { role: Role }) => {
   }, []);
 
   const unreadCount = notifications.filter(n => !n.read).length;
-  const markAllRead = () => setNotifications(notifications.map(n => ({ ...n, read: true })));
 
   const getNotifIcon = (type: string) => {
     if (type === "success") return <CheckCircle className="w-4 h-4 text-success" />;
@@ -71,8 +81,8 @@ export const PortalLayout = ({ role }: { role: Role }) => {
     { name: "Audit Log", path: "/admin/audit", icon: FileText },
   ];
 
-  const links = role === "member" ? memberLinks : role === "officer" ? officerLinks : adminLinks;
-  const portalLabel = role === "member" ? "Member Portal" : role === "officer" ? "Officer Portal" : "Admin Portal";
+  const links = activeRole === "member" ? memberLinks : activeRole === "officer" ? officerLinks : adminLinks;
+  const portalLabel = activeRole === "member" ? "Member Portal" : activeRole === "officer" ? "Officer Portal" : "Admin Portal";
 
   const isLinkActive = (path: string) => {
     const exact = path === "/member" || path === "/admin" || path === "/officer";
@@ -123,7 +133,9 @@ export const PortalLayout = ({ role }: { role: Role }) => {
         </div>
         <div className="p-3 border-t border-sidebar-border">
           <button
-            onClick={() => navigate({ to: "/login" })}
+            onClick={async () => {
+              await logoutLocal();
+            }}
             className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-sidebar-foreground/50 hover:text-red-400 hover:bg-sidebar-accent/50 w-full transition-colors"
           >
             <LogOut className="w-[18px] h-[18px]" />
@@ -153,10 +165,11 @@ export const PortalLayout = ({ role }: { role: Role }) => {
               <div className="absolute top-14 right-4 md:right-6 w-80 max-w-[calc(100vw-32px)] bg-card rounded-xl shadow-xl border border-border z-50 overflow-hidden animate-fade-in">
                 <div className="px-4 py-3 border-b border-border flex items-center justify-between">
                   <h3 className="font-heading font-bold text-sm text-foreground">Notifications</h3>
-                  {unreadCount > 0 && <button onClick={markAllRead} className="text-xs font-semibold text-primary hover:underline">Mark all read</button>}
                 </div>
                 <div className="max-h-[320px] overflow-y-auto divide-y divide-border">
-                  {notifications.map(n => (
+                  {notifications.length === 0 ? (
+                    <div className="p-4 text-sm text-muted-foreground">No notifications yet.</div>
+                  ) : notifications.map(n => (
                     <div key={n.id} className={`p-3.5 hover:bg-secondary/50 transition-colors cursor-pointer ${!n.read ? "bg-secondary/30" : ""}`}>
                       <div className="flex gap-3">
                         <div className="mt-0.5">{getNotifIcon(n.type)}</div>
@@ -174,11 +187,11 @@ export const PortalLayout = ({ role }: { role: Role }) => {
 
             <div className="flex items-center gap-2 sm:gap-3 ml-1 sm:ml-3 sm:border-l border-border sm:pl-4">
               <div className="text-right hidden sm:block">
-                <p className="text-sm font-semibold text-foreground leading-tight">{user.name}</p>
-                <p className="text-xs text-muted-foreground">{user.email}</p>
+                <p className="text-sm font-semibold text-foreground leading-tight">{user?.name ?? "Authenticated user"}</p>
+                <p className="text-xs text-muted-foreground">{user?.email ?? ""}</p>
               </div>
               <div className="w-8 h-8 rounded-full bg-primary/15 text-primary font-heading font-bold text-sm flex items-center justify-center shrink-0">
-                {user.name.charAt(0)}
+                {user?.name?.charAt(0) ?? "U"}
               </div>
             </div>
           </div>
@@ -186,12 +199,10 @@ export const PortalLayout = ({ role }: { role: Role }) => {
 
         <div className="flex-1 overflow-auto p-4 sm:p-6 md:p-8 w-full">
           <div className="max-w-6xl mx-auto animate-fade-in">
-            <Outlet />
+            {children ?? <Outlet />}
           </div>
         </div>
       </main>
-      {/* Suppress unused-import warning for Link */}
-      <Link to="/" className="hidden" aria-hidden />
     </div>
   );
 };

@@ -1,10 +1,33 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { mockLoans, formatCurrency } from "@/data/mockData";
-import { CheckCircle, Clock } from "lucide-react";
+import { useMutation, useQuery } from "convex/react";
+import { api } from "../../convex/_generated/api";
+import { CheckCircle, Clock, XCircle } from "lucide-react";
+import { useState } from "react";
+
+import { formatCurrency } from "@/data/mockData";
 
 export const Route = createFileRoute("/admin/loans")({ component: AdminLoans });
 
 function AdminLoans() {
+  const loans = useQuery(api.loans.listAll) ?? [];
+  const reviewLoan = useMutation(api.loans.reviewLoan);
+  const [busyId, setBusyId] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const pendingLoans = loans.filter((loan) => loan.status === "pending");
+
+  const handleReview = async (externalId: string, status: "active" | "rejected") => {
+    setBusyId(externalId);
+    setError(null);
+    try {
+      await reviewLoan({ externalId, status });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Unable to review loan");
+    } finally {
+      setBusyId(null);
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div>
@@ -12,27 +35,52 @@ function AdminLoans() {
         <p className="text-muted-foreground text-sm mt-1">Review and manage member loan applications.</p>
       </div>
 
-      <div className="bg-card rounded-xl border border-border overflow-hidden divide-y divide-border">
-        {mockLoans.map(loan => (
-          <div key={loan.id} className="p-4 hover:bg-secondary/30 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-secondary overflow-hidden shrink-0">
-                <img src={loan.product.image_url} alt="" className="w-full h-full object-cover" />
-              </div>
-              <div>
+      {error && (
+        <div className="rounded-lg border border-destructive/20 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+          {error}
+        </div>
+      )}
+
+      {pendingLoans.length === 0 ? (
+        <div className="bg-card rounded-xl border border-border p-12 text-center">
+          <CheckCircle className="w-12 h-12 text-success/30 mx-auto mb-3" />
+          <p className="font-heading font-semibold text-foreground">No pending loans.</p>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {pendingLoans.map((loan) => (
+            <div key={loan.externalId} className="bg-card rounded-xl border border-border p-4 flex flex-col sm:flex-row sm:items-center gap-4 justify-between">
+              <div className="min-w-0">
                 <p className="text-sm font-semibold text-foreground">{loan.member_name}</p>
-                <p className="text-[10px] text-muted-foreground">{loan.product.name}</p>
+                <p className="text-xs text-muted-foreground truncate">{loan.product_name} · {loan.purpose}</p>
+                <p className="text-sm font-semibold text-foreground mt-2">{formatCurrency(loan.total_loan_amount)}</p>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <span className="px-2 py-1 rounded-full text-[10px] font-bold uppercase bg-warning/10 text-warning border border-warning/20 flex items-center gap-1">
+                  <Clock className="w-3 h-3" /> Pending
+                </span>
+                <button
+                  onClick={() => void handleReview(loan.externalId, "rejected")}
+                  disabled={busyId === loan.externalId}
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-xs font-medium text-destructive hover:bg-destructive/10 disabled:opacity-50"
+                >
+                  <XCircle className="w-3.5 h-3.5" /> Reject
+                </button>
+                <button
+                  onClick={() => void handleReview(loan.externalId, "active")}
+                  disabled={busyId === loan.externalId}
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-xs font-medium text-primary-foreground hover:opacity-90 disabled:opacity-50"
+                >
+                  <CheckCircle className="w-3.5 h-3.5" /> Approve
+                </button>
               </div>
             </div>
-            <div className="text-right">
-              <p className="text-sm font-semibold text-foreground">{formatCurrency(loan.total_loan_amount)}</p>
-              <span className={`text-[10px] font-bold uppercase ${loan.status === "pending" ? "text-warning" : loan.status === "active" ? "text-primary" : "text-success"}`}>
-                {loan.status === "cleared" ? <CheckCircle className="w-3 h-3 inline mr-0.5" /> : <Clock className="w-3 h-3 inline mr-0.5" />}
-                {loan.status}
-              </span>
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
+      )}
+
+      <div className="text-sm text-muted-foreground">
+        Reviewed loans persist to Convex and emit an audit log entry automatically.
       </div>
     </div>
   );

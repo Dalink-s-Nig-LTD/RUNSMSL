@@ -1,5 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { LogIn, ShieldCheck, Users, TrendingUp, UserCog } from "lucide-react";
+import { useCurrentUser } from "@/hooks/useAuth";
 import rucsLogo from "@/assets/rucs-logo.png";
 
 export const Route = createFileRoute("/login")({
@@ -20,6 +22,14 @@ export const Route = createFileRoute("/login")({
 
 function LoginPage() {
   const navigate = useNavigate();
+  const { user } = useCurrentUser();
+
+  useEffect(() => {
+    if (user) {
+      const portal = user.role === "admin" ? "/admin" : user.role === "loan_officer" ? "/officer" : "/member";
+      navigate({ to: portal });
+    }
+  }, [navigate, user]);
 
   return (
     <div className="min-h-screen flex font-body">
@@ -73,7 +83,7 @@ function LoginPage() {
 
           <div className="space-y-3">
             <button
-              onClick={() => navigate({ to: "/member" })}
+              onClick={() => navigate({ to: "/signin?redirect=/member" })}
               className="w-full flex justify-center items-center py-3.5 px-4 bg-card border border-border rounded-lg shadow-sm text-sm font-semibold text-foreground hover:bg-secondary transition-all duration-200"
             >
               <svg className="h-5 w-5 mr-3" viewBox="0 0 24 24">
@@ -86,7 +96,7 @@ function LoginPage() {
             </button>
 
             <button
-              onClick={() => navigate({ to: "/officer" })}
+              onClick={() => navigate({ to: "/signin?redirect=/officer" })}
               className="w-full flex justify-center items-center py-3.5 px-4 bg-card border border-border rounded-lg shadow-sm text-sm font-semibold text-foreground hover:bg-secondary transition-all duration-200"
             >
               <UserCog className="w-5 h-5 mr-2 text-ocean-accent" />
@@ -94,7 +104,7 @@ function LoginPage() {
             </button>
 
             <button
-              onClick={() => navigate({ to: "/admin" })}
+              onClick={() => navigate({ to: "/signin?redirect=/admin" })}
               className="w-full flex justify-center items-center py-3.5 px-4 bg-primary text-primary-foreground rounded-lg shadow-sm text-sm font-semibold hover:opacity-90 transition-all duration-200"
             >
               <LogIn className="w-5 h-5 mr-2" />
